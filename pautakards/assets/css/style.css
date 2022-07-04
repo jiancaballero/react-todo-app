@@ -13,7 +13,7 @@
     --notif-red: #fd6d73;
     --text-red: #3e0e0e;
     --main-green: #589d8c;
-    --text-green: #3d7e69;
+    --text-green: #1C624C;
     --notif-green: #59a765;
     --main-yellow: #fdd273;
     --text-yellow: #b58a2a;
@@ -23,6 +23,8 @@
     --border-green: #136550;
     --border-yellow: #edb843;
     --border-purple: #22116a;
+    
+    
   }
   html {
     font-size: 10px;
@@ -104,12 +106,11 @@
     color: var(--gray);
   }
   .silip-message{
-    
+    text-transform: uppercase;
     padding:.2em;
     border-radius:3px;
   }
   .silip-not-available{
-    opacity:.7;
     background:var(--text-purple);
     color:var(--light-gray);
   }
@@ -283,6 +284,7 @@
   .energy-back-bottom img {
     width: 70%;
     filter: drop-shadow(8px 3px 0 #4a8475);
+    margin-bottom:1.5em;
   }
   .energy-back-bottom h3 {
     color: var(--text-green);
@@ -331,6 +333,7 @@
   .coin-back-bottom img {
     width: 70%;
     filter: drop-shadow(8px 3px 0 #d4b061);
+    margin-bottom:1.5em;
   }
   .coin-back-bottom h3 {
     color: var(--text-yellow);
@@ -379,6 +382,7 @@
   .life-dmg-back-bottom img {
     width: 70%;
     filter: drop-shadow(5px 3px 0 #62598a);
+    margin-bottom:1.5em;
   }
   .life-dmg-back-bottom h3 {
     color: var(--text-purple);
@@ -388,6 +392,10 @@
   
   /* DECK CARD */
   .deck-card {
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    flex-direction: column;
     width: 180px;
     height: 240px;
     border-radius: 15px;
@@ -398,6 +406,7 @@
     border: 5px solid #222222;
     border-radius: 9px;
     background-color: #1F1F1F;
+    
   }
   .deck-card::before {
     content: "";
@@ -410,6 +419,16 @@
     left: 0;
     right: 0;
     bottom: 0;
-    
   }
   
+  .deck-card h3{
+    color:var(--light-gray);
+    opacity:.5;
+    font-size:3rem;
+    font-weight: 800;
+  }
+  .deck-card p{
+    color:var(--light-gray);
+    font-size:3rem;
+    font-weight:800;
+  }
