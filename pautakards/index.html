@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PAUTAKARDS</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- MAIN WRAPPER -->
+    <div class="main-wrapper">
+      <!-- HEADER -->
+      <header class="flex-container main-header">
+        <div class="flex-container life">
+          <img src="assets/icons/heart.png" class="header-icon heart" alt="" />
+          <div class="header-menu-wrapper">
+            <h2 class="">Buhay</h2>
+            <h3 class="life-points header-points"></h3>
+            <span>/10</span>
+            <div class=" hidden life-notif notif plus-notif  animate__animated animate__fadeOutUp">
+              <small class=" life-notif-msg notif-message"></small>
+            </div>
+          </div>
+        </div>
+        <div class="flex-container energy">
+          <img
+            src="assets/icons/energy.png"
+            class="header-icon battery"
+            alt=""
+          />
+          <div class="header-menu-wrapper">
+            <h2>Lakas</h2>
+            <h3 class="energy-points header-points"></h3>
+            <span>/10</span>
+            <div class="hidden energy-notif notif plus-notif minus-notif animate__animated animate__fadeOutUp">
+              <small class="energy-notif-msg notif-message" ></small>
+            </div>
+          </div>
+        </div>
+        <div class="flex-container coins">
+          <img
+            src="assets/icons/philippine-peso.png"
+            class="header-icon peso"
+            alt=""
+          />
+          <div class="header-menu-wrapper">
+            <h2>Barya</h2>
+            <h3 class="coin-points header-points"></h3>
+            <div class="hidden coin-notif notif plus-notif minus-notif animate__animated animate__fadeOutUp">
+              <small class="coin-notif-msg notif-message hidden"></small>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-container pasilip">
+          <div
+            class="hidden pasilip-visible animate__animated animate__tada animate__infinite infinite"
+          >
+            <img
+              src="assets/icons/pasilip.png"
+              alt=""
+              class="header-icon pasilip-icon"
+            />
+          </div>
+          <div class="no-pasilip-visible">
+            <img
+              src="assets/icons/no-pasilip.png"
+              alt=""
+              class="header-icon no-pasilip-icon"
+            />
+          </div>
+          <div class="header-menu-wrapper">
+            <h2>
+              Silip
+              <small
+                class="silip-message silip-available silip-not-available"
+              ></small>
+            </h2>
+            <h3 class="peek-count header-points"></h3>
+            <span>/1</span>
+          </div>
+        </div>
+      </header>
+      <!-- MAIN SECTION -->
+
+      <section class="main">
+        <div class="container grid">
+          <!-- DECK CARD -->
+          <div class="deck-card">
+            <h3 class="deck-count"></h3>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
