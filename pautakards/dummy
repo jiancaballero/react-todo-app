@@ -8,7 +8,7 @@
         <p class="card-title">+3</p>
       </div>
       <div class="life-back-bottom back-card-bottom flex-container">
-        <img src="assets/icons/life-icons/tropa.png" alt="" />
+        <img src="assets/icons/life-icons/" alt="" />
         <h3 class="back-card-text">tropa</h3>
       </div>
     </div>
@@ -68,3 +68,46 @@
     </div>
   </div>
 </div>
+
+if(fCards.name.toLowerCase() == "tropapeeps"){
+  lifeCardImage.setAttribute("src","assets/icons/life-icons/tropa.png")
+}
+if(fCards.name.toLowerCase() == "jowabels"){
+  lifeCardImage.setAttribute("src","assets/icons/life-icons/jowa.png")
+}
+if(fCards.name.toLowerCase() == "tulog"){
+  lifeCardImage.setAttribute("src","assets/icons/life-icons/tulog.png")
+}
+if(fCards.name.toLowerCase() == "kopi"){
+  lifeCardImage.setAttribute("src","assets/icons/life-icons/kape.png")
+}
+
+if(fCards.type == "life" && fCards.name.toLowerCase() == "pamilya"){
+       
+  gameCards.classList.add("life-card")
+  gameCards.appendChild(flipCards)
+  flipCards.appendChild(lifeCardFront)
+  flipCards.appendChild(flipCardBack)
+  flipCardBack.classList.add("life-card-back")
+  flipCardBack.appendChild(backCardTop)
+  flipCardBack.appendChild(backCardBottom)
+  backCardTop.classList.add("life-back-top","flex-container")
+  const smallHeart = document.createElement("img")
+  smallHeart.setAttribute("src","assets/icons/heart-header.png")
+  const cardTitle = document.createElement("p")
+  cardTitle.setAttribute("class","card-title")
+  cardTitle.textContent= `+${fCards.value}`
+  backCardTop.appendChild(smallHeart)
+  backCardTop.appendChild(cardTitle)
+  backCardBottom.classList.add("life-back-bottom","flex-container")
+  const lifeCardImage = document.createElement("img")
+  lifeCardImage.setAttribute("src","assets/icons/life-icons/pamilya.png")
+  const lifeCardTitle = document.createElement("h3");
+  lifeCardTitle.setAttribute("class","back-card-text");
+  lifeCardTitle.textContent=fCards.name.toUpperCase()
+  backCardBottom.appendChild(lifeCardImage)
+  backCardBottom.appendChild(lifeCardTitle)
+
+
+
+}
