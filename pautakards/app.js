@@ -2,6 +2,7 @@
 VARIABLES
 ****************************************************************/
 
+const fieldCards = [];
 const deckCards = [
   //LIFE CARDS = 5
   { name: "Pamilya", value: 7, type: "life" },
@@ -18,6 +19,7 @@ const deckCards = [
 
   // COIN CARDS = 4
   { name: "ipon", value: 2, type: "coins" },
+  { name: "ipon", value: 2, type: "coins" },
   { name: "sahod", value: 3, type: "coins" },
   { name: "alahas", value: 4, type: "coins" },
 
@@ -27,7 +29,6 @@ const deckCards = [
   { name: "stress", value: 4, type: "lifedmg" },
   { name: "droga", value: 3, type: "lifedmg" },
 ];
-const fieldCards = [];
 
 // GAME POINTS VARIABLES
 let life = Number(10);
@@ -61,18 +62,24 @@ backCardBottom.setAttribute("class", "back-card-bottom");
 
 // POINTS NOTIFICATION SELECTION
 const lifeNotif = document.querySelector(".life-notif");
-const energyNotif = document.querySelector(".energy-notif");
+const energyNotifPositive = document.querySelector(".energy-notif-positive");
+const energyNotifNegative = document.querySelector(".energy-notif-negative");
 const coinNotif = document.querySelector(".coin-notif");
 const lifeNotifMessage = document.querySelector(".life-notif-msg");
-const energyNotifMessage = document.querySelector(".energynotif-msg");
+const energyNotifMessage = document.querySelector(".energy-notif-msg");
 const coinNotifMessage = document.querySelector(".coin-notif-msg");
 const deckCount = document.querySelector(".deck-count");
-
+const silipPopUp = document.querySelector(".pop-up-silip-notif");
 // SILIP SELECTORS
+
 let peekCount = document.querySelector(".peek-count");
 let pasilipVisible = document.querySelector(".pasilip-visible");
 let noPasilipVisible = document.querySelector(".no-pasilip-visible");
-let silipMessage = document.querySelector(".silip-message");
+const silipNotAvailableMessage = document.querySelector(".silip-message");
+const buySilipMessage = document.querySelector(".silip-available");
+
+// OVERLAY
+const overlay = document.querySelector(".overlay");
 
 /************************************************************************************************
 FUNCTIONS
@@ -81,7 +88,7 @@ FUNCTIONS
 showCards();
 function showCards() {
   const fieldCards = generateFieldCards(9);
-
+  deckCount.textContent = fieldCards.length;
   for (fCards of fieldCards) {
     //PARENT CARDS
     const gameCards = document.createElement("div");
@@ -98,26 +105,34 @@ function showCards() {
 
     //FLIP CARD CLICK EVENT LISTENER
     flipCards.addEventListener("click", function () {
-      flipCards.style.transform = "rotateY(180deg)";
-      const cardValue = this.closest(".card").getAttribute("card-value");
-      const cardType = this.closest(".card").getAttribute("card-type");
+      if (gameCards.getAttribute("card-type") === "lifedmg") {
+        if (silipCount != 0 && nextSilip == 0) {
+          //FIXME: when player chose to use silip, flip the card.
 
-      switch (cardType.toLowerCase()) {
-        case "life":
-          updateLifePoints(Number(cardValue));
-          break;
-        case "energy":
-          updateEnergyPoints(Number(cardValue));
-          break;
-        case "coins":
-          updateCoinPoints(Number(cardValue));
-          break;
-        case "lifedmg":
-          updateLifeDamagePoints(Number(cardValue));
-          break;
+          let playerUseSilip = useSilip();
+          console.log(playerUseSilip);
+
+          if (playerUseSilip === true) {
+            flipCards.style.transform = "rotateY(180deg)";
+            const cardValue = this.closest(".card").getAttribute("card-value");
+            const cardType = this.closest(".card").getAttribute("card-type");
+            getPoints(cardType, cardValue);
+          }
+        } else {
+          flipCards.style.transform = "rotateY(180deg)";
+          const cardValue = this.closest(".card").getAttribute("card-value");
+          const cardType = this.closest(".card").getAttribute("card-type");
+          getPoints(cardType, cardValue);
+        }
+      } else {
+        flipCards.style.transform = "rotateY(180deg)";
+        const cardValue = this.closest(".card").getAttribute("card-value");
+        const cardType = this.closest(".card").getAttribute("card-type");
+        getPoints(cardType, cardValue);
       }
     });
 
+    // SHOW LIFE CARDS
     if (fCards.type.toLowerCase() === "life") {
       // CARD FLIP FRONT AND BACK CARD
       const lifeCardFront = document.createElement("div");
@@ -180,6 +195,7 @@ function showCards() {
       lifeCardBack.appendChild(backCardBottom);
     }
 
+    // SHOW ENERGY CARDS
     if (fCards.type.toLowerCase() === "energy") {
       // CARD FLIP FRONT AND BACK CARD
       const energyCardFront = document.createElement("div");
@@ -248,6 +264,7 @@ function showCards() {
       energyCardBack.appendChild(backCardTop);
       energyCardBack.appendChild(backCardBottom);
     }
+    // SHOW COIN CARDS
     if (fCards.type.toLowerCase() === "coins") {
       // CARD FLIP FRONT AND BACK CARD
       const coinCardFront = document.createElement("div");
@@ -304,6 +321,8 @@ function showCards() {
       coinCardBack.appendChild(backCardTop);
       coinCardBack.appendChild(backCardBottom);
     }
+
+    // SHOW LIFE DAMAGE CARDS
     if (fCards.type.toLowerCase() === "lifedmg") {
       // CARD FLIP FRONT AND BACK CARD
       const lifeDmgCardFront = document.createElement("div");
@@ -378,7 +397,7 @@ function showCards() {
   }
 }
 
-//RANDOMIZE DECK CARDS
+//RANDOMIZE FIELD CARDS
 function generateFieldCards(cardCount) {
   let fieldCards = [];
   while (fieldCards.length != cardCount) {
@@ -390,9 +409,55 @@ function generateFieldCards(cardCount) {
   return fieldCards;
 }
 
-function updateLifePoints(lPoints) {
-  energy--;
-  energyPoints.textContent = energy;
+//RANDOMIZE DECK CARDS 13-18
+
+//TODO: function getRandomCardOnDeck() {}
+
+function getPoints(cardType, cardValue) {
+  switch (cardType.toLowerCase()) {
+    case "life":
+      increaseLifePoints(Number(cardValue));
+      if (nextSilip > 0) {
+        nextSilip--;
+        checkSilip();
+      } else {
+        nextSilip = 0;
+        checkSilip();
+      }
+      break;
+    case "energy":
+      if (nextSilip > 0) {
+        nextSilip--;
+        checkSilip();
+      } else {
+        nextSilip = 0;
+        checkSilip();
+      }
+      break;
+    case "coins":
+      increaseCoinPoints(Number(cardValue));
+      if (nextSilip > 0) {
+        nextSilip--;
+        checkSilip();
+      } else {
+        nextSilip = 0;
+        checkSilip();
+      }
+      break;
+    case "lifedmg":
+      decreaseLifePoints(Number(cardValue));
+      if (nextSilip > 0) {
+        nextSilip--;
+        checkSilip();
+      } else {
+        nextSilip = 0;
+        checkSilip();
+      }
+      break;
+  }
+}
+function increaseLifePoints(lPoints) {
+  decreaseEnergyPoints();
   let lifeAdded = 0;
   if (life === 10) {
     life = 10;
@@ -401,59 +466,52 @@ function updateLifePoints(lPoints) {
       if (life + lPoints - 1 >= 10) {
         lifeAdded = 10 - life;
         life += lifeAdded;
-        lifeNotif.classList.remove("hidden");
-        lifeNotifMessage.textContent = `+ ${lifeAdded}`;
         lifePoints.textContent = life;
+        displayLifeNotification(lifeAdded, "positive");
       } else {
         lifeAdded = lPoints;
         life += lifeAdded;
-        lifeNotif.classList.remove("hidden");
-        lifeNotifMessage.textContent = `+ ${lifeAdded}`;
         lifePoints.textContent = life;
+        displayLifeNotification(lifeAdded, "positive");
       }
     } else {
       if (life + lPoints >= 10) {
         lifeAdded = 10 - life;
         life += lifeAdded;
-        lifeNotif.classList.remove("hidden");
-        lifeNotifMessage.textContent = `+ ${lifeAdded}`;
         lifePoints.textContent = life;
+        displayLifeNotification(lifeAdded, "positive");
       } else {
         lifeAdded = lPoints;
         life += lifeAdded;
-        lifeNotif.classList.remove("hidden");
-        lifeNotifMessage.textContent = `+ ${lifeAdded}`;
         lifePoints.textContent = life;
+        displayLifeNotification(lifeAdded, "positive");
       }
     }
   }
 }
-function updateEnergyPoints(ePoints) {
+function increaseEnergyPoints(ePoints) {
   let energyAdded = 0;
-  debugger;
   if (energy === 10) {
     energy = 10;
   } else {
     if (energy + ePoints >= 10) {
       energyAdded = 10 - energy;
       energy += energyAdded;
-      console.log(energy);
-      // energyNotif.classList.remove('hidden');
-      // energyNotifMessage.textContent=`+ ${energyAdded}`;
       energyPoints.textContent = energy;
+      displayEnergyNotification(energyAdded, "positive");
     } else {
       energyAdded = ePoints;
       energy += energyAdded;
       // energyNotif.classList.remove('hidden');
       // energyNotifMessage.textContent=`+ ${energyAdded}`;
       energyPoints.textContent = energy;
+      displayEnergyNotification(energyAdded, "positive");
     }
   }
 }
-function updateCoinPoints(cPoints) {
+function increaseCoinPoints(cPoints) {
   let coinAdded = 0;
-  energy--;
-  energyPoints.textContent = energy;
+  decreaseEnergyPoints();
   if (energy === 0) {
     if (life - 1 === 0) {
       alert("Game Over");
@@ -462,59 +520,176 @@ function updateCoinPoints(cPoints) {
       coinAdded = cPoints;
       coins += coinAdded;
       coinPoints.textContent = coins;
-      checkSilip();
+      displayCoinNotification(coinAdded, "positive");
     }
   } else {
     let coinAdded = cPoints;
     coins += coinAdded;
+    console.log(coins);
     coinPoints.textContent = coins;
-    
-    checkSilip();
-    // coinNotif.classList.remove('hidden');
-    // coinNotifMessage.textContent=`+ ${coinAdded}`;
+    displayCoinNotification(coinAdded, "positive");
   }
 }
-function updateLifeDamagePoints(lDmgPoints) {
+
+function decreaseCointPoints(cPoints) {
+  console.log(cPoints, coins);
+  coins -= cPoints;
+  coinPoints.textContent = coins;
+  displayCoinNotification(cPoints, "negative");
+}
+function decreaseLifePoints(lDmgPoints) {
   lifeDamageAdded = 0;
   energy--;
   energyPoints.textContent = energy;
   if (energy === 0) {
     if (life - 1 <= 0) {
-      life=0;
+      life = 0;
       lifePoints.textContent = life;
       alert("Game Over");
     } else {
       lifeDamageAdded = lDmgPoints + 1;
       life -= lifeDamageAdded;
-      // lifeNotif.classList.remove("hidden");
-      //   lifeNotifMessage.textContent = `+ ${lifeAdded}`;
       lifePoints.textContent = life;
-      
+      displayLifeNotification(lDmgPoints, "negative");
     }
   } else {
     if (life - lDmgPoints <= 0) {
-      life =0;
+      life = 0;
       lifePoints.textContent = life;
+      displayLifeNotification(lDmgPoints, "negative");
       alert("Game Over");
-     
     } else {
       lifeDamageAdded = lDmgPoints;
       life -= lifeDamageAdded;
       coinPoints.textContent = coins;
-      // lifeNotif.classList.remove("hidden");
-      //   lifeNotifMessage.textContent = `+ ${lifeAdded}`;
       lifePoints.textContent = life;
+      displayLifeNotification(lDmgPoints, "negative");
     }
   }
 }
+function decreaseEnergyPoints() {
+  energy--;
+  energyPoints.textContent = energy;
+  displayEnergyNotification(1, "negative");
+}
 
-function checkSilip(){
-  console.log(coins,nextSilip,silipCount)
+function checkSilip() {
+  if (coins >= 5 && nextSilip === 0 && silipCount === 0) {
+    silipNotAvailableMessage.classList.remove("hidden");
+    buySilipMessage.classList.remove("hidden");
+    buySilipMessage.textContent = "buy";
+    silipNotAvailableMessage.classList.add("hidden");
+    peekCount.textContent = silipCount;
+    pasilipVisible.classList.add("hidden");
+  }
+  //waiting for second card selection
+  else if (coins >= 5 && nextSilip > 0 && silipCount === 0) {
+    silipNotAvailableMessage.classList.remove("hidden");
+    silipNotAvailableMessage.textContent = `available after ${nextSilip} turn/s`;
+    buySilipMessage.classList.add("hidden");
+    peekCount.textContent = silipCount;
+    pasilipVisible.classList.add("hidden");
+  }
+  //can not buy silip
+  else {
+    silipNotAvailableMessage.classList.remove("hidden");
+    buySilipMessage.classList.add("hidden");
+    peekCount.textContent = silipCount;
+    pasilipVisible.classList.add("hidden");
+  }
+}
 
-  //first coin gained
-  if(coins>=5 && nextSilip===0  && silipCount===0){
-    peekCount.textContent=silipCount;
-    silipMessage.classList.add("silipAvailable");
-    silipMessage.textContent='buy';
+function buySilip() {
+  decreaseEnergyPoints();
+  const lifeDmgCards = document.querySelectorAll(".card");
+  decreaseCointPoints(5);
+  silipCount = 1;
+  silipCounts.textContent = silipCount;
+  pasilipVisible.classList.remove("hidden");
+  noPasilipVisible.classList.add("hidden");
+  buySilipMessage.classList.add("hidden");
+  silipNotAvailableMessage.classList.add("hidden");
+
+  for (const lifeDmgCard of lifeDmgCards) {
+    if (lifeDmgCard.getAttribute("card-type") === "lifedmg") {
+      const silipIconContainer = document.createElement("div");
+      silipIconContainer.setAttribute(
+        "class",
+        "silip-icon animate__animated animate__pulse  animate__infinite"
+      );
+      const silipIcon = document.createElement("img");
+      silipIcon.setAttribute("src", "assets/icons/pasilip.png");
+      silipIconContainer.appendChild(silipIcon);
+      lifeDmgCard.appendChild(silipIconContainer);
+    }
+  }
+}
+buySilipMessage.addEventListener("click", buySilip);
+
+function useSilip() {
+  let silipIsUsed = false;
+
+  const continueButton = document.querySelector(".btn-continue");
+  const cancelButton = document.querySelector(".btn-cancel");
+  const silipCountText = document.querySelector(".pasilip-count-text");
+  silipCountText.textContent = silipCount;
+  overlay.classList.remove("hidden");
+  silipPopUp.classList.remove("hidden");
+
+  continueButton.addEventListener("click", function () {
+    silipCount = 0;
+    nextSilip = 2;
+    checkSilip();
+    overlay.classList.add("hidden");
+    silipPopUp.classList.add("hidden");
+    silipIsUsed = true;
+    return silipIsUsed;
+  });
+
+  cancelButton.addEventListener("click", function () {
+    overlay.classList.add("hidden");
+    silipPopUp.classList.add("hidden");
+    silipIsUsed = false;
+    return silipIsUsed;
+  });
+  console.log(silipIsUsed);
+  return silipIsUsed;
+}
+
+function displayLifeNotification(lPoints, notificationType) {
+  //FIXME: notifications only appear one time. some notifications dont appear.
+  if (notificationType.toLowerCase() === "positive") {
+    lifeNotif.classList.add("plus-notif");
+    lifeNotif.classList.remove("hidden");
+    lifeNotifMessage.textContent = `+${lPoints}`;
+  } else {
+    lifeNotif.classList.add("minus-notif");
+    lifeNotif.classList.remove("hidden");
+    lifeNotifMessage.textContent = `-${lPoints}`;
+  }
+}
+
+function displayEnergyNotification(ePoints, notificationType) {
+  if (notificationType.toLowerCase() === "positive") {
+    energyNotifPositive.classList.remove("hidden");
+    energyNotifPositive.classList.add("plus-notif");
+    energyNotifMessage.classList.remove("hidden");
+    energyNotifMessage.textContent = `+${ePoints}`;
+  } else {
+    energyNotifNegative.classList.remove("hidden");
+    energyNotifNegative.classList.add("minus-notif");
+    // energyNotifMessage.classList.remove("hidden");
+    energyNotifMessage.textContent = `-${ePoints}`;
+  }
+}
+function displayCoinNotification(cPoints, notificationType) {
+  if (notificationType.toLowerCase() === "positive") {
+    coinNotif.classList.remove("hidden");
+    coinNotif.classList.add("plus-notif");
+    coinNotifMessage.textContent = `+${cPoints}`;
+  } else {
+    coinNotif.classList.add("minus-notif");
+    coinNotif.classList.remove("hidden");
+    coinNotifMessage.textContent = `-${cPoints}`;
   }
 }

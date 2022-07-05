@@ -28,8 +28,10 @@
             <h2 class="">Buhay</h2>
             <h3 class="life-points header-points"></h3>
             <span>/10</span>
-            <div class="hidden life-notif notif plus-notif animate__fadeOutUp animate__animated">
-              <small class=" life-notif-msg notif-message"></small>
+            <div
+              class="hidden life-notif notif animate__fadeOutUp animate__animated"
+            >
+              <small class="life-notif-msg notif-message"></small>
             </div>
           </div>
         </div>
@@ -43,8 +45,15 @@
             <h2>Lakas</h2>
             <h3 class="energy-points header-points"></h3>
             <span>/10</span>
-            <div class="hidden energy-notif notif plus-notif minus-notif">
-              <small class="energy-notif-msg notif-message" ></small>
+            <div
+              class="hidden energy-notif-positive notif animate__fadeOutUp animate__animated"
+            >
+              <small class="energy-notif-msg notif-message"></small>
+            </div>
+            <div
+              class="hidden energy-notif-negative notif animate__fadeOutUp animate__animated"
+            >
+              <small class="energy-notif-msg notif-message"></small>
             </div>
           </div>
         </div>
@@ -57,7 +66,7 @@
           <div class="header-menu-wrapper">
             <h2>Barya</h2>
             <h3 class="coin-points header-points"></h3>
-            <div class="hidden coin-notif notif plus-notif minus-notif">
+            <div class="hidden coin-notif animate__fadeOutUp animate__animated">
               <small class="coin-notif-msg notif-message hidden"></small>
             </div>
           </div>
@@ -80,31 +89,60 @@
               class="header-icon no-pasilip-icon"
             />
           </div>
-          <div class="header-menu-wrapper">
+          <div class="header-menu-wrapper silip-div">
             <h2>
               Silip
-              <small
-                class="silip-message silip-available silip-not-available"
-              ></small>
+              <button
+                class="silip-available hidden animate__animated animate__pulse animate__infinite"
+              >
+                buy
+              </button>
+              <small class="silip-message silip-not-available"
+                >not available</small
+              >
             </h2>
             <h3 class="peek-count header-points"></h3>
             <span>/1</span>
           </div>
         </div>
       </header>
+
+      <!-- NOTIFICATIONS POPUP -->
+      <div
+        class="hidden popup pop-up-silip-notif animate__animated animate__bounceIn"
+      >
+        <div class="use-silip-pop-up flex-container">
+          <div class="use-silip-pop-up-silip">
+            <img src="assets/icons/pasilip.png" alt="" />
+            <p class="pasilip-count-text"></p>
+          </div>
+        </div>
+        <div class="use-silip-alert-message">
+          <h3>
+            The next silip is available to buy after your second selection of
+            cards. <br /><br />are you sure you want to use silip now?
+          </h3>
+        </div>
+
+        <div class="silip-pop-up-button">
+          <button class="pop-up-btn btn-continue">continue</button>
+          <button class="pop-up-btn btn-cancel">cancel</button>
+        </div>
+      </div>
       <!-- MAIN SECTION -->
 
       <section class="main">
         <div class="container grid">
           <!-- DECK CARD -->
           <div class="deck-card animate__animated animate__rollIn">
-            <h3 class="deck-title ">DECK</h3>
+            <h3 class="deck-title">DECK</h3>
             <p class="deck-count"></p>
           </div>
         </div>
       </section>
     </div>
 
+    <div class="overlay hidden"></div>
     <script src="app.js"></script>
   </body>
 </html>
