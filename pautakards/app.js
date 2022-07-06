@@ -97,6 +97,8 @@ lifeDmgCardFront.setAttribute("class", "life-dmg-card-front");
 const backCardBottom = document.createElement("div");
 backCardBottom.setAttribute("class", "back-card-bottom");
 
+const deckCardClass = document.querySelector(".deck-card");
+
 // POINTS NOTIFICATION SELECTION
 const lifeNotif = document.querySelector(".life-notif");
 const energyNotifPositive = document.querySelector(".energy-notif-positive");
@@ -129,11 +131,11 @@ const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 const randomDeckCount = random(13, 19);
 const deck = getRandomDeckCards(randomDeckCount);
 
-showCards();
-function showCards() {
+showFieldCards();
+function showFieldCards() {
   const fieldCards = generateFieldCards(9);
   deckCount.textContent = deck.length;
-  for (fCards of fieldCards) {
+  for (const [index, fCards] of fieldCards.entries()) {
     //PARENT CARDS
     const gameCards = document.createElement("div");
     gameCards.setAttribute("card-value", fCards.value);
@@ -147,301 +149,338 @@ function showCards() {
     const flipCards = document.createElement("div");
     flipCards.setAttribute("class", "flip-card-inner");
     gameCards.appendChild(flipCards);
-
     //FLIP CARD CLICK EVENT LISTENER
     flipCards.addEventListener("click", function () {
-      if (gameCards.getAttribute("card-type") === "lifedmg") {
-        if (silipCount != 0 && nextSilip == 0) {
-          //FIXME: when player chose to use silip, flip the card.
-
-          let playerUseSilip = useSilip();
-          console.log(playerUseSilip);
-
-          if (playerUseSilip === true) {
-            flipCards.style.transform = "rotateY(180deg)";
-            const cardValue = this.closest(".card").getAttribute("card-value");
-            const cardType = this.closest(".card").getAttribute("card-type");
-            const cardName = this.closest(".card").getAttribute("card-name");
-            getPoints(cardType, cardValue,cardName);
-          }
-        } else {
-          flipCards.style.transform = "rotateY(180deg)";
-          const cardValue = this.closest(".card").getAttribute("card-value");
-          const cardType = this.closest(".card").getAttribute("card-type");
-          const cardName = this.closest(".card").getAttribute("card-name");
-          getPoints(cardType, cardValue,cardName);
-        }
-      } else {
-        flipCards.style.transform = "rotateY(180deg)";
-        const cardValue = this.closest(".card").getAttribute("card-value");
-        const cardType = this.closest(".card").getAttribute("card-type");
-        const cardName = this.closest(".card").getAttribute("card-name");
-        getPoints(cardType, cardValue,cardName);
-      }
+      flipCards.style.transform = "rotateY(180deg)";
+      const cardValue = this.closest(".card").getAttribute("card-value");
+      const cardType = this.closest(".card").getAttribute("card-type");
+      const cardName = this.closest(".card").getAttribute("card-name");
+      getPoints(cardType, cardValue, cardName);
+      fieldCards.splice(0, 1);
+      //FIXME: card should flip first before removing.
+      this.parentElement.remove();
+      const fromDeck = updateDeck(deck);
+      console.log(fromDeck);
+      fieldCards.push(fromDeck);
+      console.log(fieldCards);
+      createNewFieldCard(fieldCards);
     });
+    createBackCard(fCards.type,fCards.name,fCards.value,flipCards,fieldCards);
+  }
+}
+function createNewFieldCard(newFieldCards){
+  const newFieldCard =  document.createElement("div");
+      newFieldCard.setAttribute("card-value", newFieldCards[newFieldCards.length - 1].value);
+      newFieldCard.setAttribute("card-type", newFieldCards[newFieldCards.length - 1].type);
+      newFieldCard.setAttribute("card-name", newFieldCards[newFieldCards.length - 1].name);
+      newFieldCard.setAttribute("class", "card animate__animated animate__zoomIn");
+      const newFieldCardValue = newFieldCard.getAttribute("card-value");
+      const newFieldCardType= newFieldCard.getAttribute("card-type");
+      const newFieldCardName= newFieldCard.getAttribute("card-name");
+      newFieldCard.style.setProperty("--animate-duration", "800ms");
+      container.appendChild(newFieldCard);
+      const newFlipCards = document.createElement("div");
+      newFlipCards.setAttribute("class", "flip-card-inner");
+      newFieldCard.appendChild(newFlipCards);
 
-    // SHOW LIFE CARDS
-    if (fCards.type.toLowerCase() === "life") {
-      // CARD FLIP FRONT AND BACK CARD
-      const lifeCardFront = document.createElement("div");
-      lifeCardFront.setAttribute("class", "life-card-front");
-      const lifeCardBack = document.createElement("div");
-      lifeCardBack.setAttribute("class", "flip-card-back life-card-back");
+      // NEW FLIP CARD CLICK EVENT LISTENER
+      newFlipCards.addEventListener("click",function(){
+        newFlipCards.style.transform = "rotateY(180deg)";
+      const cardValue = this.closest(".card").getAttribute("card-value");
+      const cardType = this.closest(".card").getAttribute("card-type");
+      const cardName = this.closest(".card").getAttribute("card-name");
+      getPoints(cardType, cardValue, cardName);
+      fieldCards.splice(0, 1);
+      //FIXME: card should flip first before removing.
+      this.parentElement.remove();
+      const fromDeck = updateDeck(deck);
+      console.log(fromDeck);
+      fieldCards.push(fromDeck);
+      createNewFieldCard(fieldCards);
+      console.log(fieldCards);
+      })
+      createBackCard(newFieldCardType, newFieldCardName,newFieldCardValue,newFlipCards);
+}
+function createBackCard(cardType,cardName,cardValue,flipCards) {
+  // SHOW LIFE CARDS
+  if (cardType.toLowerCase() === "life") {
+    // CARD FLIP FRONT AND BACK CARD
+    const lifeCardFront = document.createElement("div");
+    lifeCardFront.setAttribute("class", "life-card-front");
+    const lifeCardBack = document.createElement("div");
+    lifeCardBack.setAttribute("class", "flip-card-back life-card-back");
 
-      // FLIP CARD INNER APPEND LIFE CARD FRONT AND BACK
-      flipCards.appendChild(lifeCardFront);
-      flipCards.appendChild(lifeCardBack);
+    // FLIP CARD INNER APPEND LIFE CARD FRONT AND BACK
+    flipCards.appendChild(lifeCardFront);
+    flipCards.appendChild(lifeCardBack);
 
-      // CARD BACK CARD TOP
-      const backCardTop = document.createElement("div");
-      backCardTop.setAttribute(
-        "class",
-        "life-back-top back-card-top flex-container"
+    // CARD BACK CARD TOP
+    const backCardTop = document.createElement("div");
+    backCardTop.setAttribute(
+      "class",
+      "life-back-top back-card-top flex-container"
+    );
+    const smallHeart = document.createElement("img");
+    smallHeart.setAttribute("src", "../assets/icons/heart-header.png");
+    const cardTitle = document.createElement("p");
+    cardTitle.setAttribute("class", "card-title");
+    cardTitle.textContent = `+${cardValue}`;
+    backCardTop.appendChild(smallHeart);
+    backCardTop.appendChild(cardTitle);
+
+    //CARD BACK CARD BOTTOM
+    const backCardBottom = document.createElement("div");
+    backCardBottom.setAttribute(
+      "class",
+      "back-card-bottom life-back-bottom",
+      "flex-container"
+    );
+    const lifeCardImage = document.createElement("img");
+    if (cardName.toLowerCase() == "pamilya") {
+      lifeCardImage.setAttribute(
+        "src",
+        "../assets/icons/life-icons/pamilya.png"
       );
-      const smallHeart = document.createElement("img");
-      smallHeart.setAttribute("src", "../assets/icons/heart-header.png");
-      const cardTitle = document.createElement("p");
-      cardTitle.setAttribute("class", "card-title");
-      cardTitle.textContent = `+${fCards.value}`;
-      backCardTop.appendChild(smallHeart);
-      backCardTop.appendChild(cardTitle);
-
-      //CARD BACK CARD BOTTOM
-      const backCardBottom = document.createElement("div");
-      backCardBottom.setAttribute(
-        "class",
-        "back-card-bottom life-back-bottom",
-        "flex-container"
+    }
+    if (cardName.toLowerCase() == "tropa") {
+      lifeCardImage.setAttribute(
+        "src",
+        "../assets/icons/life-icons/tropa.png"
       );
-      const lifeCardImage = document.createElement("img");
-      if (fCards.name.toLowerCase() == "pamilya") {
-        lifeCardImage.setAttribute(
-          "src",
-          "../assets/icons/life-icons/pamilya.png"
-        );
-      }
-      if (fCards.name.toLowerCase() == "tropa") {
-        lifeCardImage.setAttribute("src", "../assets/icons/life-icons/tropa.png");
-      }
-      if (fCards.name.toLowerCase() == "jowabels") {
-        lifeCardImage.setAttribute("src", "../assets/icons/life-icons/jowa.png");
-      }
-      if (fCards.name.toLowerCase() == "tulog") {
-        lifeCardImage.setAttribute("src", "../assets/icons/life-icons/tulog.png");
-      }
-      if (fCards.name.toLowerCase() == "kopi") {
-        lifeCardImage.setAttribute("src", "../assets/icons/life-icons/kape.png");
-      }
-      const lifeCardTitle = document.createElement("h3");
-      lifeCardTitle.setAttribute("class", "back-card-text");
-      lifeCardTitle.textContent = fCards.name.toUpperCase();
-      backCardBottom.appendChild(lifeCardImage);
-      backCardBottom.appendChild(lifeCardTitle);
+    }
+    if (cardName.toLowerCase() == "jowabels") {
+      lifeCardImage.setAttribute(
+        "src",
+        "../assets/icons/life-icons/jowa.png"
+      );
+    }
+    if (cardName.toLowerCase() == "tulog") {
+      lifeCardImage.setAttribute(
+        "src",
+        "../assets/icons/life-icons/tulog.png"
+      );
+    }
+    if (cardName.toLowerCase() == "kopi") {
+      lifeCardImage.setAttribute(
+        "src",
+        "../assets/icons/life-icons/kape.png"
+      );
+    }
+    const lifeCardTitle = document.createElement("h3");
+    lifeCardTitle.setAttribute("class", "back-card-text");
+    lifeCardTitle.textContent = cardName.toUpperCase();
+    backCardBottom.appendChild(lifeCardImage);
+    backCardBottom.appendChild(lifeCardTitle);
 
-      // CARD BACK APPEND FRONT AND BACK
-      lifeCardBack.appendChild(backCardTop);
-      lifeCardBack.appendChild(backCardBottom);
+    // CARD BACK APPEND FRONT AND BACK
+    lifeCardBack.appendChild(backCardTop);
+    lifeCardBack.appendChild(backCardBottom);
+  }
+
+  // SHOW ENERGY CARDS
+  if (cardType.toLowerCase() === "energy") {
+    // CARD FLIP FRONT AND BACK CARD
+    const energyCardFront = document.createElement("div");
+    energyCardFront.setAttribute("class", "energy-card-front");
+    const energyCardBack = document.createElement("div");
+    energyCardBack.setAttribute("class", "flip-card-back energy-card-back");
+
+    // FLIP CARD INNER APPEND energy CARD FRONT AND BACK
+    flipCards.appendChild(energyCardFront);
+    flipCards.appendChild(energyCardBack);
+
+    // CARD BACK CARD TOP
+    const backCardTop = document.createElement("div");
+    backCardTop.setAttribute(
+      "class",
+      "energy-back-top back-card-top flex-container"
+    );
+    const smallEnergy = document.createElement("img");
+    smallEnergy.setAttribute("src", "../assets/icons/enery-header.png");
+    const cardTitle = document.createElement("p");
+    cardTitle.setAttribute("class", "card-title");
+    cardTitle.textContent = `+${cardValue}`;
+    backCardTop.appendChild(smallEnergy);
+    backCardTop.appendChild(cardTitle);
+
+    //CARD BACK CARD BOTTOM
+    const backCardBottom = document.createElement("div");
+    backCardBottom.setAttribute(
+      "class",
+      "back-card-bottom energy-back-bottom",
+      "flex-container"
+    );
+    const energyCardImage = document.createElement("img");
+    if (cardName.toLowerCase() == "chika") {
+      energyCardImage.setAttribute(
+        "src",
+        "../assets/icons/energy-icons/chika.png"
+      );
+    }
+    if (cardName.toLowerCase() == "harurut") {
+      energyCardImage.setAttribute(
+        "src",
+        "../assets/icons/energy-icons/harot.png"
+      );
+    }
+    if (cardName.toLowerCase() == "walwal") {
+      energyCardImage.setAttribute(
+        "src",
+        "../assets/icons/energy-icons/walwal.png"
+      );
+    }
+    if (cardName.toLowerCase() == "lamon") {
+      energyCardImage.setAttribute(
+        "src",
+        "../assets/icons/energy-icons/lamon.png"
+      );
     }
 
-    // SHOW ENERGY CARDS
-    if (fCards.type.toLowerCase() === "energy") {
-      // CARD FLIP FRONT AND BACK CARD
-      const energyCardFront = document.createElement("div");
-      energyCardFront.setAttribute("class", "energy-card-front");
-      const energyCardBack = document.createElement("div");
-      energyCardBack.setAttribute("class", "flip-card-back energy-card-back");
+    const energyCardTitle = document.createElement("h3");
+    energyCardTitle.setAttribute("class", "back-card-text");
+    energyCardTitle.textContent = cardName.toUpperCase();
+    backCardBottom.appendChild(energyCardImage);
+    backCardBottom.appendChild(energyCardTitle);
 
-      // FLIP CARD INNER APPEND energy CARD FRONT AND BACK
-      flipCards.appendChild(energyCardFront);
-      flipCards.appendChild(energyCardBack);
+    // CARD BACK APPEND FRONT AND BACK
+    energyCardBack.appendChild(backCardTop);
+    energyCardBack.appendChild(backCardBottom);
+  }
+  // SHOW COIN CARDS
+  if (cardType.toLowerCase() === "coins") {
+    // CARD FLIP FRONT AND BACK CARD
+    const coinCardFront = document.createElement("div");
+    coinCardFront.setAttribute("class", "coin-card-front");
+    const coinCardBack = document.createElement("div");
+    coinCardBack.setAttribute("class", "flip-card-back coin-card-back");
 
-      // CARD BACK CARD TOP
-      const backCardTop = document.createElement("div");
-      backCardTop.setAttribute(
-        "class",
-        "energy-back-top back-card-top flex-container"
+    // FLIP CARD INNER APPEND coin CARD FRONT AND BACK
+    flipCards.appendChild(coinCardFront);
+    flipCards.appendChild(coinCardBack);
+
+    // CARD BACK CARD TOP
+    const backCardTop = document.createElement("div");
+    backCardTop.setAttribute(
+      "class",
+      "coin-back-top back-card-top flex-container"
+    );
+    const smallCoin = document.createElement("img");
+    smallCoin.setAttribute("src", "../assets/icons/peso-card-header.png");
+    const cardTitle = document.createElement("p");
+    cardTitle.setAttribute("class", "card-title");
+    cardTitle.textContent = `+${cardValue}`;
+    backCardTop.appendChild(smallCoin);
+    backCardTop.appendChild(cardTitle);
+
+    //CARD BACK CARD BOTTOM
+    const backCardBottom = document.createElement("div");
+    backCardBottom.setAttribute(
+      "class",
+      "back-card-bottom coin-back-bottom",
+      "flex-container"
+    );
+    const coinCardImage = document.createElement("img");
+    if (cardName.toLowerCase() == "alahas") {
+      coinCardImage.setAttribute(
+        "src",
+        "../assets/icons/coin-icons/diamond.png"
       );
-      const smallEnergy = document.createElement("img");
-      smallEnergy.setAttribute("src", "../assets/icons/enery-header.png");
-      const cardTitle = document.createElement("p");
-      cardTitle.setAttribute("class", "card-title");
-      cardTitle.textContent = `+${fCards.value}`;
-      backCardTop.appendChild(smallEnergy);
-      backCardTop.appendChild(cardTitle);
-
-      //CARD BACK CARD BOTTOM
-      const backCardBottom = document.createElement("div");
-      backCardBottom.setAttribute(
-        "class",
-        "back-card-bottom energy-back-bottom",
-        "flex-container"
-      );
-      const energyCardImage = document.createElement("img");
-      if (fCards.name.toLowerCase() == "chika") {
-        energyCardImage.setAttribute(
-          "src",
-          "../assets/icons/energy-icons/chika.png"
-        );
-      }
-      if (fCards.name.toLowerCase() == "harurut") {
-        energyCardImage.setAttribute(
-          "src",
-          "../assets/icons/energy-icons/harot.png"
-        );
-      }
-      if (fCards.name.toLowerCase() == "walwal") {
-        energyCardImage.setAttribute(
-          "src",
-          "../assets/icons/energy-icons/walwal.png"
-        );
-      }
-      if (fCards.name.toLowerCase() == "lamon") {
-        energyCardImage.setAttribute(
-          "src",
-          "../assets/icons/energy-icons/lamon.png"
-        );
-      }
-
-      const energyCardTitle = document.createElement("h3");
-      energyCardTitle.setAttribute("class", "back-card-text");
-      energyCardTitle.textContent = fCards.name.toUpperCase();
-      backCardBottom.appendChild(energyCardImage);
-      backCardBottom.appendChild(energyCardTitle);
-
-      // CARD BACK APPEND FRONT AND BACK
-      energyCardBack.appendChild(backCardTop);
-      energyCardBack.appendChild(backCardBottom);
     }
-    // SHOW COIN CARDS
-    if (fCards.type.toLowerCase() === "coins") {
-      // CARD FLIP FRONT AND BACK CARD
-      const coinCardFront = document.createElement("div");
-      coinCardFront.setAttribute("class", "coin-card-front");
-      const coinCardBack = document.createElement("div");
-      coinCardBack.setAttribute("class", "flip-card-back coin-card-back");
-
-      // FLIP CARD INNER APPEND coin CARD FRONT AND BACK
-      flipCards.appendChild(coinCardFront);
-      flipCards.appendChild(coinCardBack);
-
-      // CARD BACK CARD TOP
-      const backCardTop = document.createElement("div");
-      backCardTop.setAttribute(
-        "class",
-        "coin-back-top back-card-top flex-container"
+    if (cardName.toLowerCase() == "sahod") {
+      coinCardImage.setAttribute(
+        "src",
+        "../assets/icons/coin-icons/sahod.png"
       );
-      const smallCoin = document.createElement("img");
-      smallCoin.setAttribute("src", "../assets/icons/peso-card-header.png");
-      const cardTitle = document.createElement("p");
-      cardTitle.setAttribute("class", "card-title");
-      cardTitle.textContent = `+${fCards.value}`;
-      backCardTop.appendChild(smallCoin);
-      backCardTop.appendChild(cardTitle);
-
-      //CARD BACK CARD BOTTOM
-      const backCardBottom = document.createElement("div");
-      backCardBottom.setAttribute(
-        "class",
-        "back-card-bottom coin-back-bottom",
-        "flex-container"
+    }
+    if (cardName.toLowerCase() == "ipon") {
+      coinCardImage.setAttribute(
+        "src",
+        "../assets/icons/coin-icons/ipon.png"
       );
-      const coinCardImage = document.createElement("img");
-      if (fCards.name.toLowerCase() == "alahas") {
-        coinCardImage.setAttribute(
-          "src",
-          "../assets/icons/coin-icons/diamond.png"
-        );
-      }
-      if (fCards.name.toLowerCase() == "sahod") {
-        coinCardImage.setAttribute("src", "../assets/icons/coin-icons/sahod.png");
-      }
-      if (fCards.name.toLowerCase() == "ipon") {
-        coinCardImage.setAttribute("src", "../assets/icons/coin-icons/ipon.png");
-      }
-
-      const coinCardTitle = document.createElement("h3");
-      coinCardTitle.setAttribute("class", "back-card-text");
-      coinCardTitle.textContent = fCards.name.toUpperCase();
-      backCardBottom.appendChild(coinCardImage);
-      backCardBottom.appendChild(coinCardTitle);
-
-      // CARD BACK APPEND FRONT AND BACK
-      coinCardBack.appendChild(backCardTop);
-      coinCardBack.appendChild(backCardBottom);
     }
 
-    // SHOW LIFE DAMAGE CARDS
-    if (fCards.type.toLowerCase() === "lifedmg") {
-      // CARD FLIP FRONT AND BACK CARD
-      const lifeDmgCardFront = document.createElement("div");
-      lifeDmgCardFront.setAttribute("class", "life-dmg-card-front");
-      const lifeDmgCardBack = document.createElement("div");
-      lifeDmgCardBack.setAttribute(
-        "class",
-        "flip-card-back life-dmg-card-back"
+    const coinCardTitle = document.createElement("h3");
+    coinCardTitle.setAttribute("class", "back-card-text");
+    coinCardTitle.textContent = cardName.toUpperCase();
+    backCardBottom.appendChild(coinCardImage);
+    backCardBottom.appendChild(coinCardTitle);
+
+    // CARD BACK APPEND FRONT AND BACK
+    coinCardBack.appendChild(backCardTop);
+    coinCardBack.appendChild(backCardBottom);
+  }
+
+  // SHOW LIFE DAMAGE CARDS
+  if (cardType.toLowerCase() === "lifedmg") {
+    // CARD FLIP FRONT AND BACK CARD
+    const lifeDmgCardFront = document.createElement("div");
+    lifeDmgCardFront.setAttribute("class", "life-dmg-card-front");
+    const lifeDmgCardBack = document.createElement("div");
+    lifeDmgCardBack.setAttribute(
+      "class",
+      "flip-card-back life-dmg-card-back"
+    );
+
+    // FLIP CARD INNER APPEND lifeDmg CARD FRONT AND BACK
+    flipCards.appendChild(lifeDmgCardFront);
+    flipCards.appendChild(lifeDmgCardBack);
+
+    // CARD BACK CARD TOP
+    const backCardTop = document.createElement("div");
+    backCardTop.setAttribute(
+      "class",
+      "life-dmg-back-top back-card-top flex-container"
+    );
+    const smallSkull = document.createElement("img");
+    smallSkull.setAttribute("src", "../assets/icons/human-skull.png");
+    const cardTitle = document.createElement("p");
+    cardTitle.setAttribute("class", "card-title");
+    cardTitle.textContent = `+${cardValue}`;
+    backCardTop.appendChild(smallSkull);
+    backCardTop.appendChild(cardTitle);
+
+    //CARD BACK CARD BOTTOM
+    const backCardBottom = document.createElement("div");
+    backCardBottom.setAttribute(
+      "class",
+      "back-card-bottom life-dmg-back-bottom",
+      "flex-container"
+    );
+    const lifeDmgCardImage = document.createElement("img");
+    if (cardName.toLowerCase() == "puyat") {
+      lifeDmgCardImage.setAttribute(
+        "src",
+        "../assets/icons/life-damage-icons/puyat.png"
       );
-
-      // FLIP CARD INNER APPEND lifeDmg CARD FRONT AND BACK
-      flipCards.appendChild(lifeDmgCardFront);
-      flipCards.appendChild(lifeDmgCardBack);
-
-      // CARD BACK CARD TOP
-      const backCardTop = document.createElement("div");
-      backCardTop.setAttribute(
-        "class",
-        "life-dmg-back-top back-card-top flex-container"
-      );
-      const smallSkull = document.createElement("img");
-      smallSkull.setAttribute("src", "../assets/icons/human-skull.png");
-      const cardTitle = document.createElement("p");
-      cardTitle.setAttribute("class", "card-title");
-      cardTitle.textContent = `+${fCards.value}`;
-      backCardTop.appendChild(smallSkull);
-      backCardTop.appendChild(cardTitle);
-
-      //CARD BACK CARD BOTTOM
-      const backCardBottom = document.createElement("div");
-      backCardBottom.setAttribute(
-        "class",
-        "back-card-bottom life-dmg-back-bottom",
-        "flex-container"
-      );
-      const lifeDmgCardImage = document.createElement("img");
-      if (fCards.name.toLowerCase() == "puyat") {
-        lifeDmgCardImage.setAttribute(
-          "src",
-          "../assets/icons/life-damage-icons/puyat.png"
-        );
-      }
-      if (fCards.name.toLowerCase() == "stress") {
-        lifeDmgCardImage.setAttribute(
-          "src",
-          "../assets/icons/life-damage-icons/istres.png"
-        );
-      }
-      if (fCards.name.toLowerCase() == "droga") {
-        lifeDmgCardImage.setAttribute(
-          "src",
-          "../assets/icons/life-damage-icons/droga.png"
-        );
-      }
-      if (fCards.name.toLowerCase() == "covid") {
-        lifeDmgCardImage.setAttribute(
-          "src",
-          "../assets/icons/life-damage-icons/covid.png"
-        );
-      }
-
-      const lifeDmgCardTitle = document.createElement("h3");
-      lifeDmgCardTitle.setAttribute("class", "back-card-text");
-      lifeDmgCardTitle.textContent = fCards.name.toUpperCase();
-      backCardBottom.appendChild(lifeDmgCardImage);
-      backCardBottom.appendChild(lifeDmgCardTitle);
-
-      // CARD BACK APPEND FRONT AND BACK
-      lifeDmgCardBack.appendChild(backCardTop);
-      lifeDmgCardBack.appendChild(backCardBottom);
     }
+    if (cardName.toLowerCase() == "stress") {
+      lifeDmgCardImage.setAttribute(
+        "src",
+        "../assets/icons/life-damage-icons/istres.png"
+      );
+    }
+    if (cardName.toLowerCase() == "droga") {
+      lifeDmgCardImage.setAttribute(
+        "src",
+        "../assets/icons/life-damage-icons/droga.png"
+      );
+    }
+    if (cardName.toLowerCase() == "covid") {
+      lifeDmgCardImage.setAttribute(
+        "src",
+        "../assets/icons/life-damage-icons/covid.png"
+      );
+    }
+
+    const lifeDmgCardTitle = document.createElement("h3");
+    lifeDmgCardTitle.setAttribute("class", "back-card-text");
+    lifeDmgCardTitle.textContent = cardName.toUpperCase();
+    backCardBottom.appendChild(lifeDmgCardImage);
+    backCardBottom.appendChild(lifeDmgCardTitle);
+
+    // CARD BACK APPEND FRONT AND BACK
+    lifeDmgCardBack.appendChild(backCardTop);
+    lifeDmgCardBack.appendChild(backCardBottom);
   }
 }
 
@@ -468,7 +507,7 @@ function generateFieldCards(cardCount) {
 }
 
 
-function getPoints(cardType, cardValue,cardName) {
+function getPoints(cardType, cardValue, cardName) {
   // FIXME: silip turns to not available when any card is clicked while there is silip
   switch (cardType.toLowerCase()) {
     case "life":
@@ -477,7 +516,6 @@ function getPoints(cardType, cardValue,cardName) {
         nextSilip--;
         checkSilip();
       } else {
-        
         checkSilip();
       }
       break;
@@ -502,7 +540,7 @@ function getPoints(cardType, cardValue,cardName) {
       }
       break;
     case "lifedmg":
-      decreaseLifePoints(Number(cardValue),cardName);
+      decreaseLifePoints(Number(cardValue), cardName);
       if (nextSilip > 0) {
         nextSilip--;
         checkSilip();
@@ -580,7 +618,7 @@ function increaseCoinPoints(cPoints) {
   } else {
     let coinAdded = cPoints;
     coins += coinAdded;
-    console.log(coins);
+
     coinPoints.textContent = coins;
     // displayCoinNotification(coinAdded, "positive");
   }
@@ -592,7 +630,7 @@ function decreaseCointPoints(cPoints) {
   coinPoints.textContent = coins;
   // displayCoinNotification(cPoints, "negative");
 }
-function decreaseLifePoints(lDmgPoints,cardName) {
+function decreaseLifePoints(lDmgPoints, cardName) {
   lifeDamageAdded = 0;
   energy--;
   energyPoints.textContent = energy;
@@ -772,45 +810,61 @@ function gameOver(cardName) {
   const causeOfDeath = document.querySelector(".cause-of-death");
   const causeOfDeathImage = document.querySelector(".cause-of-death-img");
   const quoteClass = document.querySelector(".quote");
-  const restartBtn = document.querySelector(".restart")
-  const exitBtn = document.querySelector(".exit")
+  const restartBtn = document.querySelector(".restart");
+  const exitBtn = document.querySelector(".exit");
 
   switch (cardName.toLowerCase()) {
     //FIXME: wala sa document yung image source and engrave class
     case "covid":
       gameOverQuote = generateRandomQuote(covidQuotesArray);
-      causeOfDeath.textContent=cardName;
-      causeOfDeathImage.setAttribute("src","../assets/icons/life-damage-icons/covid.png");
-      quoteClass.textContent=gameOverQuote;
+      causeOfDeath.textContent = cardName;
+      causeOfDeathImage.setAttribute(
+        "src",
+        "../assets/icons/life-damage-icons/covid.png"
+      );
+      quoteClass.textContent = gameOverQuote;
       break;
     case "puyat":
       gameOverQuote = generateRandomQuote(puyatQuotesArray);
-      causeOfDeath.textContent=cardName;
-      causeOfDeathImage.setAttribute("src","/../assets/icons/life-damage-icons/puyat.png");
-      quoteClass.textContent=gameOverQuote;
+      causeOfDeath.textContent = cardName;
+      causeOfDeathImage.setAttribute(
+        "src",
+        "/../assets/icons/life-damage-icons/puyat.png"
+      );
+      quoteClass.textContent = gameOverQuote;
       break;
     case "stress":
       gameOverQuote = generateRandomQuote(stressQuotesArray);
-      causeOfDeath.textContent=cardName;
-      causeOfDeathImage.setAttribute("src","../assets/icons/life-damage-icons/istres.png");
-      quoteClass.textContent=gameOverQuote;
+      causeOfDeath.textContent = cardName;
+      causeOfDeathImage.setAttribute(
+        "src",
+        "../assets/icons/life-damage-icons/istres.png"
+      );
+      quoteClass.textContent = gameOverQuote;
       break;
     case "droga":
       gameOverQuote = generateRandomQuote(drogaQuotesArray);
-      causeOfDeath.textContent=cardName;
-      causeOfDeathImage.setAttribute("src","../assets/icons/life-damage-icons/droga.png");
+      causeOfDeath.textContent = cardName;
+      causeOfDeathImage.setAttribute(
+        "src",
+        "../assets/icons/life-damage-icons/droga.png"
+      );
       break;
     default:
-      causeOfDeath.textContent="Oh No! You ran out of life";
-      causeOfDeathImage.setAttribute("src","../assets/icons/heart.png");
-
+      causeOfDeath.textContent = "Oh No! You ran out of life";
+      causeOfDeathImage.setAttribute("src", "../assets/icons/heart.png");
   }
   overlay.classList.remove("hidden");
   gameOverClass.classList.remove("hidden");
 
-  restartBtn.addEventListener("click",function(){
+  restartBtn.addEventListener("click", function () {
     window.location.reload();
-   
-  })
- 
+  });
 }
+
+function updateDeck(deck) {
+  const fromDeck = deck.pop();
+  deckCount.textContent = deck.length;
+  return fromDeck;
+}
+
