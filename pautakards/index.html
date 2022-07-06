@@ -16,65 +16,35 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
       rel="stylesheet"
     />
+    <script
+      src="https://kit.fontawesome.com/d6e5a0d43e.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
-    <!-- MAIN WRAPPER -->
     <div class="main-wrapper">
-      <!-- HEADER -->
       <header class="flex-container main-header">
-        <div class="flex-container life animate__tada animate__animated">
+        <div class="flex-container life animate__tada">
           <img src="assets/icons/heart.png" class="header-icon heart" alt="" />
-          <div class="header-menu-wrapper">
-            <h2 class="">Buhay</h2>
-            <h3 class="life-points header-points"></h3>
-            <span>/10</span>
-            <div
-              class="hidden life-notif notif animate__fadeOutUp animate__animated"
-            >
-              <small class="life-notif-msg notif-message"></small>
-            </div>
-          </div>
         </div>
-        <div class="flex-container energy animate__tada animate__animated">
+        <div class="flex-container energy animate__tada">
           <img
             src="assets/icons/energy.png"
             class="header-icon battery"
             alt=""
           />
-          <div class="header-menu-wrapper">
-            <h2>Lakas</h2>
-            <h3 class="energy-points header-points"></h3>
-            <span>/10</span>
-            <div
-              class="hidden energy-notif-positive notif animate__fadeOutUp animate__animated"
-            >
-              <small class="energy-notif-msg notif-message"></small>
-            </div>
-            <div
-              class="hidden energy-notif-negative notif animate__fadeOutUp animate__animated"
-            >
-              <small class="energy-notif-msg notif-message"></small>
-            </div>
-          </div>
         </div>
-        <div class="flex-container coins animate__tada animate__animated">
+        <div class="flex-container coins animate__tada">
           <img
             src="assets/icons/philippine-peso.png"
             class="header-icon peso"
             alt=""
           />
-          <div class="header-menu-wrapper">
-            <h2>Barya</h2>
-            <h3 class="coin-points header-points"></h3>
-            <div class="hidden coin-notif animate__fadeOutUp animate__animated">
-              <small class="coin-notif-msg notif-message hidden"></small>
-            </div>
-          </div>
         </div>
 
-        <div class="flex-container pasilip animate__tada animate__animated">
+        <div class="flex-container pasilip animate__tada">
           <div
-            class="hidden pasilip-visible animate__animated animate__tada animate__infinite infinite"
+            class="hidden pasilip-visible animate__tada animate__infinite infinite"
           >
             <img
               src="assets/icons/pasilip.png"
@@ -82,67 +52,165 @@
               class="header-icon pasilip-icon"
             />
           </div>
-          <div class="no-pasilip-visible">
-            <img
-              src="assets/icons/no-pasilip.png"
-              alt=""
-              class="header-icon no-pasilip-icon"
-            />
-          </div>
-          <div class="header-menu-wrapper silip-div">
-            <h2>
-              Silip
-              <button
-                class="silip-available hidden animate__animated animate__pulse animate__infinite"
-              >
-                buy
-              </button>
-              <small class="silip-message silip-not-available"
-                >not available</small
-              >
-            </h2>
-            <h3 class="peek-count header-points"></h3>
-            <span>/1</span>
-          </div>
         </div>
       </header>
-
-      <!-- NOTIFICATIONS POPUP -->
-      <div
-        class="hidden popup pop-up-silip-notif animate__animated animate__bounceIn"
-      >
-        <div class="use-silip-pop-up flex-container">
-          <div class="use-silip-pop-up-silip">
-            <img src="assets/icons/pasilip.png" alt="" />
-            <p class="pasilip-count-text"></p>
-          </div>
-        </div>
-        <div class="use-silip-alert-message">
-          <h3>
-            The next silip is available to buy after your second selection of
-            cards. <br /><br />are you sure you want to use silip now?
-          </h3>
-        </div>
-
-        <div class="silip-pop-up-button">
-          <button class="pop-up-btn btn-continue">continue</button>
-          <button class="pop-up-btn btn-cancel">cancel</button>
-        </div>
-      </div>
-      <!-- MAIN SECTION -->
-
       <section class="main">
         <div class="container grid">
-          <!-- DECK CARD -->
-          <div class="deck-card animate__animated animate__rollIn">
-            <h3 class="deck-title">DECK</h3>
-            <p class="deck-count"></p>
+            <!-- LIFE CARDS -->
+            <div class="card animate__animated animate__rollIn animate__infinite life-card animate__slow ">
+             <div class="flip-card-inner">
+               <div class="life-card-front"></div>
+               <div class="flip-card-back life-card-back">
+                 <div class="life-back-top back-card-top flex-container">
+                 </div>
+                 <div class="life-back-bottom back-card-bottom flex-container">
+                   <img src="assets/icons/life-icons/" alt="" />
+                 </div>
+               </div>
+             </div>
+           </div>
+           <!-- ENERGY CARDS -->
+<div class="card animate__animated animate__rollIn animate__infinite energy-card animate__slow ">
+    <div class="flip-card-inner">
+      <div class="energy-card-front"></div>
+      <div class="flip-card-back energy-card-back">
+        <div class="energy-back-top back-card-top flex-container">
+         
+        </div>
+        <div
+          class="energy-back-bottom back-card-bottom card-bottom flex-container"
+        >
+   
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- COIN CARDS -->
+<div class="card animate__animated animate__rollIn animate__infinite coin-card animate__slow ">
+    <div class="flip-card-inner">
+      <div class="coin-card-front"></div>
+      <div class="flip-card-back coin-card-back">
+        <div class="coin-back-top back-card-top flex-container">
+        </div>
+        <div
+          class="coin-back-bottom back-card-bottom card-bottom flex-container"
+        >
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- LIFE DMG CARDS -->
+<div class="card animate__animated animate__rollIn animate__infinite life-dmg-card animate__slow ">
+    <div class="flip-card-inner">
+      <div class="life-dmg-card-front"></div>
+      <div class="flip-card-back life-dmg-card-back">
+        <div class="life-dmg-back-top back-card-top flex-container">
+        </div>
+        <div
+          class="life-dmg-back-bottom back-card-bottom card-bottom flex-container"
+        >
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- LIFE CARDS -->
+    <div class="card animate__animated animate__rollIn animate__infinite life-card animate__slow">
+        <div class="flip-card-inner">
+          <div class="life-card-front"></div>
+          <div class="flip-card-back life-card-back">
+            <div class="life-back-top back-card-top flex-container">
+            </div>
+            <div class="life-back-bottom back-card-bottom flex-container">
+              <img src="assets/icons/life-icons/" alt="" />
+            </div>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+      <!-- ENERGY CARDS -->
+<div class="card animate__animated animate__rollIn animate__infinite energy-card animate__slow ">
+<div class="flip-card-inner">
+ <div class="energy-card-front"></div>
+ <div class="flip-card-back energy-card-back">
+   <div class="energy-back-top back-card-top flex-container">
+    
+   </div>
+   <div
+     class="energy-back-bottom back-card-bottom card-bottom flex-container"
+   >
 
-    <div class="overlay hidden"></div>
-    <script src="app.js"></script>
+   </div>
+ </div>
+</div>
+</div>
+<!-- COIN CARDS -->
+<div class="card animate__animated animate__rollIn animate__infinite coin-card animate__slow ">
+<div class="flip-card-inner">
+ <div class="coin-card-front"></div>
+ <div class="flip-card-back coin-card-back">
+   <div class="coin-back-top back-card-top flex-container">
+   </div>
+   <div
+     class="coin-back-bottom back-card-bottom card-bottom flex-container"
+   >
+   </div>
+ </div>
+</div>
+</div>
+<!-- LIFE DMG CARDS -->
+<div class="card animate__animated animate__rollIn animate__infinite life-dmg-card animate__slow ">
+<div class="flip-card-inner">
+ <div class="life-dmg-card-front"></div>
+ <div class="flip-card-back life-dmg-card-back">
+   <div class="life-dmg-back-top back-card-top flex-container">
+   </div>
+   <div
+     class="life-dmg-back-bottom back-card-bottom card-bottom flex-container"
+   >
+   </div>
+ </div>
+</div>
+</div>
+<!-- COIN CARDS -->
+<div class="card animate__animated animate__rollIn animate__infinite coin-card animate__slow ">
+    <div class="flip-card-inner">
+     <div class="coin-card-front"></div>
+     <div class="flip-card-back coin-card-back">
+       <div class="coin-back-top back-card-top flex-container">
+       </div>
+       <div
+         class="coin-back-bottom back-card-bottom card-bottom flex-container"
+       >
+       </div>
+     </div>
+    </div>
+    </div>
+    <!-- LIFE DMG CARDS -->
+    <div class="card animate__animated animate__rollIn animate__infinite animate__slow life-dmg-card">
+    <div class="flip-card-inner">
+     <div class="life-dmg-card-front"></div>
+     <div class="flip-card-back life-dmg-card-back">
+       <div class="life-dmg-back-top back-card-top flex-container">
+       </div>
+       <div
+         class="life-dmg-back-bottom back-card-bottom card-bottom flex-container"
+       >
+       </div>
+     </div>
+    </div>
+    </div>
+        </div>
+      </section>
+      <div class="game-title">
+        <h1 class="animate__animated  animate__pulse animate__infinite">Pautakards</h1>
+        <div class="start-buttons">
+            <a href="source/game.html" target="_top" class="start-game-btn">Click to start</a>
+            <a href="" class="how-to-play-btn">How to play</a>
+        </div>
+      </div>
+      <div class="overlay">
+        
+      </div>
+    </div>
+    </div>
   </body>
 </html>

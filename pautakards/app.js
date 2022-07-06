@@ -1,33 +1,68 @@
 /****************************************************************
-VARIABLES
+                            VARIABLES
 ****************************************************************/
 
 const fieldCards = [];
 const deckCards = [
-  //LIFE CARDS = 5
+  //LIFE CARDS = 10
+  { name: "Pamilya", value: 7, type: "life" },
+  { name: "Tropa", value: 6, type: "life" },
+  { name: "tulog", value: 5, type: "life" },
+  { name: "Jowabels", value: 4, type: "life" },
+  { name: "Kopi", value: 3, type: "life" },
   { name: "Pamilya", value: 7, type: "life" },
   { name: "Tropa", value: 6, type: "life" },
   { name: "tulog", value: 5, type: "life" },
   { name: "Jowabels", value: 4, type: "life" },
   { name: "Kopi", value: 3, type: "life" },
 
-  // ENERGY CARDS = 4
+  // ENERGY CARDS = 8
+  { name: "harurut", value: 2, type: "energy" },
+  { name: "chika", value: 4, type: "energy" },
+  { name: "walwal", value: 3, type: "energy" },
+  { name: "lamon", value: 5, type: "energy" },
   { name: "harurut", value: 2, type: "energy" },
   { name: "chika", value: 4, type: "energy" },
   { name: "walwal", value: 3, type: "energy" },
   { name: "lamon", value: 5, type: "energy" },
 
-  // COIN CARDS = 4
+  // COIN CARDS = 6
   { name: "ipon", value: 2, type: "coins" },
   { name: "ipon", value: 2, type: "coins" },
   { name: "sahod", value: 3, type: "coins" },
+  { name: "sahod", value: 3, type: "coins" },
+  { name: "alahas", value: 4, type: "coins" },
   { name: "alahas", value: 4, type: "coins" },
 
-  // LIFE DMG CARDS = 4
+  // LIFE DMG CARDS = 8
   { name: "covid", value: 6, type: "lifedmg" },
   { name: "puyat", value: 5, type: "lifedmg" },
   { name: "stress", value: 4, type: "lifedmg" },
   { name: "droga", value: 3, type: "lifedmg" },
+  { name: "covid", value: 6, type: "lifedmg" },
+  { name: "puyat", value: 5, type: "lifedmg" },
+  { name: "stress", value: 4, type: "lifedmg" },
+  { name: "droga", value: 3, type: "lifedmg" },
+];
+const covidQuotesArray = [
+  "“Take care of your body, it’s the only place you have to live.“",
+  "“Today is your day to start fresh, to eat right, to train hard, to live healthy, to be proud.“",
+  "Let's spread positivity but not with covid“",
+];
+const puyatQuotesArray = [
+  "“Oh, sleep deprivation! A gift and a curse indeed!”",
+  "“The best bridge between despair and hope is a good night’s sleep.“",
+  "“No day is so bad that can’t be fixed with a nap.“",
+];
+const drogaQuotesArray = [
+  "“What drains your spirit drains your body. What fuels your spirit fuels your body.”",
+  "“The key to a healthy life is having a healthy mind.”",
+  "“Happiness is the highest form of health.”",
+];
+const stressQuotesArray = [
+  "“D.E.A.D. spells out Drugs End All Dreams.”",
+  "“Getting wasted is a waste of time.”",
+  "“The more you use, the less you live.”",
 ];
 
 // GAME POINTS VARIABLES
@@ -36,6 +71,7 @@ let energy = Number(10);
 let coins = Number(0);
 let silipCount = Number(0); //Max of 1
 let nextSilip = Number(0); // 0 = available
+
 // POINTS SELECTORS
 let lifePoints = document.querySelector(".life-points");
 let energyPoints = document.querySelector(".energy-points");
@@ -45,6 +81,7 @@ energyPoints.textContent = energy;
 lifePoints.textContent = life;
 coinPoints.textContent = coins;
 silipCounts.textContent = silipCount;
+
 // CONTAINER SELECTOR
 const container = document.querySelector(".container");
 
@@ -70,8 +107,8 @@ const energyNotifMessage = document.querySelector(".energy-notif-msg");
 const coinNotifMessage = document.querySelector(".coin-notif-msg");
 const deckCount = document.querySelector(".deck-count");
 const silipPopUp = document.querySelector(".pop-up-silip-notif");
-// SILIP SELECTORS
 
+// SILIP SELECTORS
 let peekCount = document.querySelector(".peek-count");
 let pasilipVisible = document.querySelector(".pasilip-visible");
 let noPasilipVisible = document.querySelector(".no-pasilip-visible");
@@ -82,18 +119,26 @@ const buySilipMessage = document.querySelector(".silip-available");
 const overlay = document.querySelector(".overlay");
 
 /************************************************************************************************
-FUNCTIONS
+                                        FUNCTIONS
 ************************************************************************************************/
+
+//GENERATE A RANDOM NUMBER
+const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+
+//RANDOMIZE DECK CARDS 13-18
+const randomDeckCount = random(13, 19);
+const deck = getRandomDeckCards(randomDeckCount);
 
 showCards();
 function showCards() {
   const fieldCards = generateFieldCards(9);
-  deckCount.textContent = fieldCards.length;
+  deckCount.textContent = deck.length;
   for (fCards of fieldCards) {
     //PARENT CARDS
     const gameCards = document.createElement("div");
     gameCards.setAttribute("card-value", fCards.value);
     gameCards.setAttribute("card-type", fCards.type);
+    gameCards.setAttribute("card-name", fCards.name);
     gameCards.setAttribute("class", "card animate__animated animate__rollIn");
     gameCards.style.setProperty("--animate-duration", "800ms");
     container.appendChild(gameCards);
@@ -116,19 +161,22 @@ function showCards() {
             flipCards.style.transform = "rotateY(180deg)";
             const cardValue = this.closest(".card").getAttribute("card-value");
             const cardType = this.closest(".card").getAttribute("card-type");
-            getPoints(cardType, cardValue);
+            const cardName = this.closest(".card").getAttribute("card-name");
+            getPoints(cardType, cardValue,cardName);
           }
         } else {
           flipCards.style.transform = "rotateY(180deg)";
           const cardValue = this.closest(".card").getAttribute("card-value");
           const cardType = this.closest(".card").getAttribute("card-type");
-          getPoints(cardType, cardValue);
+          const cardName = this.closest(".card").getAttribute("card-name");
+          getPoints(cardType, cardValue,cardName);
         }
       } else {
         flipCards.style.transform = "rotateY(180deg)";
         const cardValue = this.closest(".card").getAttribute("card-value");
         const cardType = this.closest(".card").getAttribute("card-type");
-        getPoints(cardType, cardValue);
+        const cardName = this.closest(".card").getAttribute("card-name");
+        getPoints(cardType, cardValue,cardName);
       }
     });
 
@@ -151,7 +199,7 @@ function showCards() {
         "life-back-top back-card-top flex-container"
       );
       const smallHeart = document.createElement("img");
-      smallHeart.setAttribute("src", "assets/icons/heart-header.png");
+      smallHeart.setAttribute("src", "../assets/icons/heart-header.png");
       const cardTitle = document.createElement("p");
       cardTitle.setAttribute("class", "card-title");
       cardTitle.textContent = `+${fCards.value}`;
@@ -169,20 +217,20 @@ function showCards() {
       if (fCards.name.toLowerCase() == "pamilya") {
         lifeCardImage.setAttribute(
           "src",
-          "assets/icons/life-icons/pamilya.png"
+          "../assets/icons/life-icons/pamilya.png"
         );
       }
       if (fCards.name.toLowerCase() == "tropa") {
-        lifeCardImage.setAttribute("src", "assets/icons/life-icons/tropa.png");
+        lifeCardImage.setAttribute("src", "../assets/icons/life-icons/tropa.png");
       }
       if (fCards.name.toLowerCase() == "jowabels") {
-        lifeCardImage.setAttribute("src", "assets/icons/life-icons/jowa.png");
+        lifeCardImage.setAttribute("src", "../assets/icons/life-icons/jowa.png");
       }
       if (fCards.name.toLowerCase() == "tulog") {
-        lifeCardImage.setAttribute("src", "assets/icons/life-icons/tulog.png");
+        lifeCardImage.setAttribute("src", "../assets/icons/life-icons/tulog.png");
       }
       if (fCards.name.toLowerCase() == "kopi") {
-        lifeCardImage.setAttribute("src", "assets/icons/life-icons/kape.png");
+        lifeCardImage.setAttribute("src", "../assets/icons/life-icons/kape.png");
       }
       const lifeCardTitle = document.createElement("h3");
       lifeCardTitle.setAttribute("class", "back-card-text");
@@ -214,7 +262,7 @@ function showCards() {
         "energy-back-top back-card-top flex-container"
       );
       const smallEnergy = document.createElement("img");
-      smallEnergy.setAttribute("src", "assets/icons/enery-header.png");
+      smallEnergy.setAttribute("src", "../assets/icons/enery-header.png");
       const cardTitle = document.createElement("p");
       cardTitle.setAttribute("class", "card-title");
       cardTitle.textContent = `+${fCards.value}`;
@@ -232,25 +280,25 @@ function showCards() {
       if (fCards.name.toLowerCase() == "chika") {
         energyCardImage.setAttribute(
           "src",
-          "assets/icons/energy-icons/chika.png"
+          "../assets/icons/energy-icons/chika.png"
         );
       }
       if (fCards.name.toLowerCase() == "harurut") {
         energyCardImage.setAttribute(
           "src",
-          "assets/icons/energy-icons/harot.png"
+          "../assets/icons/energy-icons/harot.png"
         );
       }
       if (fCards.name.toLowerCase() == "walwal") {
         energyCardImage.setAttribute(
           "src",
-          "assets/icons/energy-icons/walwal.png"
+          "../assets/icons/energy-icons/walwal.png"
         );
       }
       if (fCards.name.toLowerCase() == "lamon") {
         energyCardImage.setAttribute(
           "src",
-          "assets/icons/energy-icons/lamon.png"
+          "../assets/icons/energy-icons/lamon.png"
         );
       }
 
@@ -283,7 +331,7 @@ function showCards() {
         "coin-back-top back-card-top flex-container"
       );
       const smallCoin = document.createElement("img");
-      smallCoin.setAttribute("src", "assets/icons/peso-card-header.png");
+      smallCoin.setAttribute("src", "../assets/icons/peso-card-header.png");
       const cardTitle = document.createElement("p");
       cardTitle.setAttribute("class", "card-title");
       cardTitle.textContent = `+${fCards.value}`;
@@ -301,14 +349,14 @@ function showCards() {
       if (fCards.name.toLowerCase() == "alahas") {
         coinCardImage.setAttribute(
           "src",
-          "assets/icons/coin-icons/diamond.png"
+          "../assets/icons/coin-icons/diamond.png"
         );
       }
       if (fCards.name.toLowerCase() == "sahod") {
-        coinCardImage.setAttribute("src", "assets/icons/coin-icons/sahod.png");
+        coinCardImage.setAttribute("src", "../assets/icons/coin-icons/sahod.png");
       }
       if (fCards.name.toLowerCase() == "ipon") {
-        coinCardImage.setAttribute("src", "assets/icons/coin-icons/ipon.png");
+        coinCardImage.setAttribute("src", "../assets/icons/coin-icons/ipon.png");
       }
 
       const coinCardTitle = document.createElement("h3");
@@ -344,7 +392,7 @@ function showCards() {
         "life-dmg-back-top back-card-top flex-container"
       );
       const smallSkull = document.createElement("img");
-      smallSkull.setAttribute("src", "assets/icons/human-skull.png");
+      smallSkull.setAttribute("src", "../assets/icons/human-skull.png");
       const cardTitle = document.createElement("p");
       cardTitle.setAttribute("class", "card-title");
       cardTitle.textContent = `+${fCards.value}`;
@@ -362,25 +410,25 @@ function showCards() {
       if (fCards.name.toLowerCase() == "puyat") {
         lifeDmgCardImage.setAttribute(
           "src",
-          "assets/icons/life-damage-icons/puyat.png"
+          "../assets/icons/life-damage-icons/puyat.png"
         );
       }
       if (fCards.name.toLowerCase() == "stress") {
         lifeDmgCardImage.setAttribute(
           "src",
-          "assets/icons/life-damage-icons/istres.png"
+          "../assets/icons/life-damage-icons/istres.png"
         );
       }
       if (fCards.name.toLowerCase() == "droga") {
         lifeDmgCardImage.setAttribute(
           "src",
-          "assets/icons/life-damage-icons/droga.png"
+          "../assets/icons/life-damage-icons/droga.png"
         );
       }
       if (fCards.name.toLowerCase() == "covid") {
         lifeDmgCardImage.setAttribute(
           "src",
-          "assets/icons/life-damage-icons/covid.png"
+          "../assets/icons/life-damage-icons/covid.png"
         );
       }
 
@@ -397,23 +445,31 @@ function showCards() {
   }
 }
 
+//RANDOMIZE DECK CARD
+function getRandomDeckCards(cardCount) {
+  let deck = [];
+  while (deck.length != cardCount) {
+    const randomIndex = Math.floor(Math.random() * deckCards.length);
+    deck.push(deckCards[randomIndex]);
+  }
+  return deck;
+}
+
 //RANDOMIZE FIELD CARDS
 function generateFieldCards(cardCount) {
   let fieldCards = [];
   while (fieldCards.length != cardCount) {
-    const randomIndex = Math.floor(Math.random() * deckCards.length);
-    if (!fieldCards.includes(deckCards[randomIndex])) {
-      fieldCards.push(deckCards[randomIndex]);
+    const randomIndex = Math.floor(Math.random() * deck.length);
+    if (!fieldCards.includes(deck[randomIndex])) {
+      fieldCards.push(deck[randomIndex]);
     }
   }
   return fieldCards;
 }
 
-//RANDOMIZE DECK CARDS 13-18
 
-//TODO: function getRandomCardOnDeck() {}
-
-function getPoints(cardType, cardValue) {
+function getPoints(cardType, cardValue,cardName) {
+  // FIXME: silip turns to not available when any card is clicked while there is silip
   switch (cardType.toLowerCase()) {
     case "life":
       increaseLifePoints(Number(cardValue));
@@ -421,11 +477,12 @@ function getPoints(cardType, cardValue) {
         nextSilip--;
         checkSilip();
       } else {
-        nextSilip = 0;
+        
         checkSilip();
       }
       break;
     case "energy":
+      increaseEnergyPoints(Number(cardValue));
       if (nextSilip > 0) {
         nextSilip--;
         checkSilip();
@@ -445,7 +502,7 @@ function getPoints(cardType, cardValue) {
       }
       break;
     case "lifedmg":
-      decreaseLifePoints(Number(cardValue));
+      decreaseLifePoints(Number(cardValue),cardName);
       if (nextSilip > 0) {
         nextSilip--;
         checkSilip();
@@ -467,24 +524,24 @@ function increaseLifePoints(lPoints) {
         lifeAdded = 10 - life;
         life += lifeAdded;
         lifePoints.textContent = life;
-        displayLifeNotification(lifeAdded, "positive");
+        // displayLifeNotification(lifeAdded, "positive");
       } else {
         lifeAdded = lPoints;
         life += lifeAdded;
         lifePoints.textContent = life;
-        displayLifeNotification(lifeAdded, "positive");
+        // displayLifeNotification(lifeAdded, "positive");
       }
     } else {
       if (life + lPoints >= 10) {
         lifeAdded = 10 - life;
         life += lifeAdded;
         lifePoints.textContent = life;
-        displayLifeNotification(lifeAdded, "positive");
+        // displayLifeNotification(lifeAdded, "positive");
       } else {
         lifeAdded = lPoints;
         life += lifeAdded;
         lifePoints.textContent = life;
-        displayLifeNotification(lifeAdded, "positive");
+        // displayLifeNotification(lifeAdded, "positive");
       }
     }
   }
@@ -498,14 +555,12 @@ function increaseEnergyPoints(ePoints) {
       energyAdded = 10 - energy;
       energy += energyAdded;
       energyPoints.textContent = energy;
-      displayEnergyNotification(energyAdded, "positive");
+      // displayEnergyNotification(energyAdded, "positive");
     } else {
       energyAdded = ePoints;
       energy += energyAdded;
-      // energyNotif.classList.remove('hidden');
-      // energyNotifMessage.textContent=`+ ${energyAdded}`;
       energyPoints.textContent = energy;
-      displayEnergyNotification(energyAdded, "positive");
+      // displayEnergyNotification(energyAdded, "positive");
     }
   }
 }
@@ -520,14 +575,14 @@ function increaseCoinPoints(cPoints) {
       coinAdded = cPoints;
       coins += coinAdded;
       coinPoints.textContent = coins;
-      displayCoinNotification(coinAdded, "positive");
+      // displayCoinNotification(coinAdded, "positive");
     }
   } else {
     let coinAdded = cPoints;
     coins += coinAdded;
     console.log(coins);
     coinPoints.textContent = coins;
-    displayCoinNotification(coinAdded, "positive");
+    // displayCoinNotification(coinAdded, "positive");
   }
 }
 
@@ -535,9 +590,9 @@ function decreaseCointPoints(cPoints) {
   console.log(cPoints, coins);
   coins -= cPoints;
   coinPoints.textContent = coins;
-  displayCoinNotification(cPoints, "negative");
+  // displayCoinNotification(cPoints, "negative");
 }
-function decreaseLifePoints(lDmgPoints) {
+function decreaseLifePoints(lDmgPoints,cardName) {
   lifeDamageAdded = 0;
   energy--;
   energyPoints.textContent = energy;
@@ -545,32 +600,32 @@ function decreaseLifePoints(lDmgPoints) {
     if (life - 1 <= 0) {
       life = 0;
       lifePoints.textContent = life;
-      alert("Game Over");
+      gameOver(cardName);
     } else {
       lifeDamageAdded = lDmgPoints + 1;
       life -= lifeDamageAdded;
       lifePoints.textContent = life;
-      displayLifeNotification(lDmgPoints, "negative");
+      // displayLifeNotification(lDmgPoints, "negative");
     }
   } else {
     if (life - lDmgPoints <= 0) {
       life = 0;
       lifePoints.textContent = life;
-      displayLifeNotification(lDmgPoints, "negative");
-      alert("Game Over");
+      // displayLifeNotification(lDmgPoints, "negative");
+      gameOver(cardName);
     } else {
       lifeDamageAdded = lDmgPoints;
       life -= lifeDamageAdded;
       coinPoints.textContent = coins;
       lifePoints.textContent = life;
-      displayLifeNotification(lDmgPoints, "negative");
+      // displayLifeNotification(lDmgPoints, "negative");
     }
   }
 }
 function decreaseEnergyPoints() {
   energy--;
   energyPoints.textContent = energy;
-  displayEnergyNotification(1, "negative");
+  // displayEnergyNotification(1, "negative");
 }
 
 function checkSilip() {
@@ -618,7 +673,7 @@ function buySilip() {
         "silip-icon animate__animated animate__pulse  animate__infinite"
       );
       const silipIcon = document.createElement("img");
-      silipIcon.setAttribute("src", "assets/icons/pasilip.png");
+      silipIcon.setAttribute("src", "../assets/icons/pasilip.png");
       silipIconContainer.appendChild(silipIcon);
       lifeDmgCard.appendChild(silipIconContainer);
     }
@@ -692,4 +747,70 @@ function displayCoinNotification(cPoints, notificationType) {
     coinNotif.classList.remove("hidden");
     coinNotifMessage.textContent = `-${cPoints}`;
   }
+}
+
+const gameOverQuote = generateRandomQuote(covidQuotesArray);
+function generateRandomQuote(array) {
+  let curId = array.length;
+  // There remain elements to shuffle
+  while (0 !== curId) {
+    // Pick a remaining element
+    let randId = Math.floor(Math.random() * curId);
+    curId -= 1;
+    // Swap it with the current element.
+    let tmp = array[curId];
+    array[curId] = array[randId];
+    array[randId] = tmp;
+  }
+  return array[0];
+}
+
+function gameOver(cardName) {
+  overlay.classList.remove();
+  let gameOverQuote = "";
+  const gameOverClass = document.querySelector(".game-over-main-wrapper");
+  const causeOfDeath = document.querySelector(".cause-of-death");
+  const causeOfDeathImage = document.querySelector(".cause-of-death-img");
+  const quoteClass = document.querySelector(".quote");
+  const restartBtn = document.querySelector(".restart")
+  const exitBtn = document.querySelector(".exit")
+
+  switch (cardName.toLowerCase()) {
+    //FIXME: wala sa document yung image source and engrave class
+    case "covid":
+      gameOverQuote = generateRandomQuote(covidQuotesArray);
+      causeOfDeath.textContent=cardName;
+      causeOfDeathImage.setAttribute("src","../assets/icons/life-damage-icons/covid.png");
+      quoteClass.textContent=gameOverQuote;
+      break;
+    case "puyat":
+      gameOverQuote = generateRandomQuote(puyatQuotesArray);
+      causeOfDeath.textContent=cardName;
+      causeOfDeathImage.setAttribute("src","/../assets/icons/life-damage-icons/puyat.png");
+      quoteClass.textContent=gameOverQuote;
+      break;
+    case "stress":
+      gameOverQuote = generateRandomQuote(stressQuotesArray);
+      causeOfDeath.textContent=cardName;
+      causeOfDeathImage.setAttribute("src","../assets/icons/life-damage-icons/istres.png");
+      quoteClass.textContent=gameOverQuote;
+      break;
+    case "droga":
+      gameOverQuote = generateRandomQuote(drogaQuotesArray);
+      causeOfDeath.textContent=cardName;
+      causeOfDeathImage.setAttribute("src","../assets/icons/life-damage-icons/droga.png");
+      break;
+    default:
+      causeOfDeath.textContent="Oh No! You ran out of life";
+      causeOfDeathImage.setAttribute("src","../assets/icons/heart.png");
+
+  }
+  overlay.classList.remove("hidden");
+  gameOverClass.classList.remove("hidden");
+
+  restartBtn.addEventListener("click",function(){
+    window.location.reload();
+   
+  })
+ 
 }
