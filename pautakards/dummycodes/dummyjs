@@ -21,3 +21,12 @@
         }
         
       }
+
+
+
+      parent.remove();
+      const fromDeck = updateDeck(deck);
+      console.log(fromDeck);
+      fieldCards.push(fromDeck);
+      console.log(fieldCards);
+      createNewFieldCard(fieldCards);

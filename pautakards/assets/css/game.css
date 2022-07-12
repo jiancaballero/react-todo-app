@@ -23,6 +23,7 @@
   --border-yellow: #edb843;
   --border-purple: #22116a;
 }
+
 html {
   font-size: 10px;
 }
@@ -140,9 +141,6 @@ header {
   color: white;
   font-size: 1.5rem;
 }
-.animate__animated.animate__fadeOutUp {
-  --animate-duration: 2.5s;
-}
 
 .popup {
   top: 20%;
@@ -240,6 +238,8 @@ header {
   border-radius: 15px;
   perspective: 1000px;
   grid-column: span 1fr;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
 }
 .flip-card-inner {
   position: relative;
@@ -667,9 +667,41 @@ header {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(0.5px);
   z-index: 5;
 }
 .hidden {
   display: none;
+}
+/* VICTORY */
+.victory-wrapper{
+  flex-direction: column;
+  gap:40px;
+  margin:0 auto;
+  width:50%;
+  
+  top: 0;
+  bottom:0;
+  left: 0;
+  right:0;
+  justify-content: center;
+  position: absolute;
+  z-index:6;
+}
+.victory-text{
+  text-align: center;
+  text-transform: uppercase;
+  color:var(--border-yellow);
+  font-size:4.8rem;
+}
+.victory-image{
+  display:flex;
+  justify-content: center;
+
+}
+.victory-image img{
+  width:40%;
+}
+.victory-buttons{
+  margin:0 auto;
 }
