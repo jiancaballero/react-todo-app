@@ -2,7 +2,6 @@
                             VARIABLES
 ****************************************************************/
 
-const fieldCards = [];
 const deckCards = [
   //LIFE CARDS = 12
   { name: "Pamilya", value: 7, type: "life" },
@@ -82,8 +81,7 @@ let playLifeDmgAudio = () => new Audio("../assets/audio/lifedmg.wav").play();
 let playCardDropAudio = () => new Audio("../assets/audio/card-drop.wav").play();
 let playVictoryAudio = () => new Audio("../assets/audio/victory.mp3").play();
 let playSilipAudio = () => new Audio("../assets/audio/silip.wav").play();
-// const audio = document.querySelector("#bg-music");
-// audio.play();
+
 // GAME POINTS VARIABLES
 let life = Number(10);
 let energy = Number(10);
@@ -202,87 +200,9 @@ function showFieldCards() {
     flipCards.setAttribute("class", "flip-card-inner");
     gameCards.appendChild(flipCards);
     //FLIP CARD CLICK EVENT LISTENER
+
     flipCards.addEventListener("click", function () {
-      if (
-        !this.hasAttribute("disabled") 
-       
-      ) {
-        this.setAttribute("disabled", true);
-        const cardValue = this.closest(".card").getAttribute("card-value");
-        const cardType = this.closest(".card").getAttribute("card-type");
-        const cardName = this.closest(".card").getAttribute("card-name");
-
-        switch (cardType.toLowerCase()) {
-          case "life":
-            increaseLifePoints(Number(cardValue));
-
-            //remove the card in the array
-            fieldCards.splice(0, 1);
-            // rotate the card
-            this.style.transform = "rotateY(180deg)";
-            let flipParentLife = this.parentElement;
-
-            //perform the removal of card
-            removeFieldCard(flipParentLife);
-
-            break;
-
-          case "energy":
-            increaseEnergyPoints(Number(cardValue));
-
-            //remove the card in the array
-            fieldCards.splice(index, 1);
-            // rotate the card
-            this.style.transform = "rotateY(180deg)";
-            let flipParentEnergy = this.parentElement;
-
-            //perform the removal of card
-            removeFieldCard(flipParentEnergy);
-
-            break;
-
-          case "coins":
-            increaseCoinPoints(Number(cardValue));
-
-            //remove the card in the array
-            fieldCards.splice(index, 1);
-            // rotate the card
-            this.style.transform = "rotateY(180deg)";
-            const flipParentCoin = this.parentElement;
-
-            //perform the removal of card
-            removeFieldCard(flipParentCoin);
-
-            break;
-
-          default:
-            const flipParentLifeDmg = this.parentElement;
-            //if life damage card is clicked but has silip
-            if (silipCount > 0) {
-              debugger;
-              if (isFlip === true) {
-                decreaseLifePoints(Number(cardValue), cardName);
-                //remove the card in the array
-                fieldCards.splice(index, 1);
-                //perform the removal of card
-                flipParentLifeDmg.remove();
-              } else {
-                useSilip(this);
-              }
-            } else {
-              decreaseLifePoints(Number(cardValue), cardName);
-              //remove the card in the array
-              fieldCards.splice(index, 1);
-              //flip the card
-              this.style.transform = "rotateY(180deg)";
-              //perform the removal of card
-              removeFieldCard(flipParentLifeDmg);
-            }
-
-            break;
-        }
-        checkSilip();
-      }
+      performCardFunctionality(this);
     });
     createBackCard(
       fCards.type,
@@ -293,6 +213,7 @@ function showFieldCards() {
     );
   }
 }
+
 function createNewFieldCard(newFieldCards) {
   if (newFieldCards) {
     const newFieldCard = document.createElement("div");
@@ -304,14 +225,14 @@ function createNewFieldCard(newFieldCards) {
       "card animate__animated animate__zoomIn"
     );
     // FIXME: add animation to new card
-    // newFieldCard.addEventListener("animationend", () => {
-    //   newFieldCard.classList.remove("animate__zoomIn");
-    //   newFieldCard.classList.add(
-    //     "animate__pulse",
-    //     "animate__slower",
-    //     "animate__infinite"
-    //   );
-    // });
+    newFieldCard.addEventListener("animationend", () => {
+      newFieldCard.classList.remove("animate__zoomIn");
+      newFieldCard.classList.add(
+        "animate__pulse",
+        "animate__slower",
+        "animate__infinite"
+      );
+    });
     const newFieldCardValue = newFieldCard.getAttribute("card-value");
     const newFieldCardType = newFieldCard.getAttribute("card-type");
     const newFieldCardName = newFieldCard.getAttribute("card-name");
@@ -321,70 +242,31 @@ function createNewFieldCard(newFieldCards) {
     newFlipCards.setAttribute("class", "flip-card-inner");
     newFieldCard.appendChild(newFlipCards);
 
+    if (buyFlag === 1) {
+     
+      const lifeDmgCards = document.querySelectorAll(
+        ".flip-card-inner:not(.open-silip)"
+      );
+      for (const lifeDmgCard of lifeDmgCards) {
+        
+        const parentLifeDmgCard = lifeDmgCard.closest(".card");
+        if (parentLifeDmgCard.getAttribute("card-type") === "lifedmg") {
+          const silipIconContainer = document.createElement("div");
+          silipIconContainer.setAttribute(
+            "class",
+            "silip-icon animate__animated animate__pulse  animate__infinite"
+          );
+          const silipIcon = document.createElement("img");
+          silipIcon.setAttribute("src", "../assets/icons/pasilip.png");
+          silipIconContainer.appendChild(silipIcon);
+          parentLifeDmgCard.appendChild(silipIconContainer);
+          parentLifeDmgCard.closest(".card").classList.add("life-dmg-card-buy");
+        }
+      }
+    }
     // NEW FLIP CARD CLICK EVENT LISTENER
     newFlipCards.addEventListener("click", function () {
-      const cardValue = this.closest(".card").getAttribute("card-value");
-      const cardType = this.closest(".card").getAttribute("card-type");
-      const cardName = this.closest(".card").getAttribute("card-name");
-
-      switch (cardType.toLowerCase()) {
-        case "life":
-          increaseLifePoints(Number(cardValue));
-
-          // rotate the card
-          this.style.transform = "rotateY(180deg)";
-
-          let flipParentLife = this.parentElement;
-
-          //perform the removal of card
-          removeFieldCard(flipParentLife);
-          break;
-        case "energy":
-          increaseEnergyPoints(Number(cardValue));
-
-          // rotate the card
-          this.style.transform = "rotateY(180deg)";
-          let flipParentEnergy = this.parentElement;
-          //perform the removal of card
-          removeFieldCard(flipParentEnergy);
-
-          break;
-        case "coins":
-          increaseCoinPoints(Number(cardValue));
-
-          // rotate the card
-          this.style.transform = "rotateY(180deg)";
-          const flipParentCoin = this.parentElement;
-          //perform the removal of card
-          removeFieldCard(flipParentCoin);
-
-          break;
-        case "lifedmg":
-          // FIXME: lifedmg card that was flip can still use silip.
-          const flipParentLifeDmg = this.parentElement;
-          if (silipCount > 0) {
-            if (isFlip === true) {
-              const silipIcon = document.querySelector(".silip-icon");
-              silipIcon.classList.add("hidden");
-              decreaseLifePoints(Number(cardValue), cardName);
-              //perform the removal of card
-              flipParentLifeDmg.remove();
-            } else {
-              useSilip(this);
-            }
-          } else {
-            decreaseLifePoints(Number(cardValue), cardName);
-            //remove the card in the array
-
-            //flip the card
-            this.style.transform = "rotateY(180deg)";
-            //perform the removal of card
-            removeFieldCard(flipParentLifeDmg);
-          }
-
-          break;
-      }
-      checkSilip();
+      performCardFunctionality(this);
     });
     createBackCard(
       newFieldCardType,
@@ -397,6 +279,79 @@ function createNewFieldCard(newFieldCards) {
   return;
 }
 
+// PERFORM ALL NECESSARY FUNCTIONS OF THE CARD WHEN CLICKED
+function performCardFunctionality(thisCard) {
+  if (!thisCard.hasAttribute("disabled")) {
+    thisCard.setAttribute("disabled", true);
+    const cardValue = thisCard.closest(".card").getAttribute("card-value");
+    const cardType = thisCard.closest(".card").getAttribute("card-type");
+    const cardName = thisCard.closest(".card").getAttribute("card-name");
+
+    switch (cardType.toLowerCase()) {
+      case "life":
+        increaseLifePoints(Number(cardValue));
+
+        //remove the card in the array
+        // fieldCards.splice(0, 1);
+        // rotate the card
+        thisCard.style.transform = "rotateY(180deg)";
+        let flipParentLife = thisCard.parentElement;
+
+        //perform the removal of card
+        removeFieldCard(flipParentLife);
+
+        break;
+
+      case "energy":
+        increaseEnergyPoints(Number(cardValue));
+
+        //remove the card in the array
+        // fieldCards.splice(index, 1);
+        // rotate the card
+        thisCard.style.transform = "rotateY(180deg)";
+        let flipParentEnergy = thisCard.parentElement;
+
+        //perform the removal of card
+        removeFieldCard(flipParentEnergy);
+
+        break;
+
+      case "coins":
+        increaseCoinPoints(Number(cardValue));
+
+        //remove the card in the array
+        // fieldCards.splice(index, 1);
+        // rotate the card
+        thisCard.style.transform = "rotateY(180deg)";
+        const flipParentCoin = thisCard.parentElement;
+
+        //perform the removal of card
+        removeFieldCard(flipParentCoin);
+
+        break;
+
+      default:
+        const flipParentLifeDmg = thisCard.parentElement;
+        //if life damage card is clicked but has silip
+        if (silipCount > 0) {
+         
+          useSilip(thisCard, cardValue, cardName);
+        } else {
+          decreaseLifePoints(Number(cardValue), cardName);
+          //remove the card in the array
+          // fieldCards.splice(index, 1);
+          //flip the card
+          thisCard.style.transform = "rotateY(180deg)";
+          //perform the removal of card
+          removeFieldCard(flipParentLifeDmg);
+        }
+
+        break;
+    }
+    checkSilip();
+  }
+}
+
 //REMOVE THE FIELD CARD CLICKED
 function removeFieldCard(flipParent) {
   // FIXME: card can still be clicked and execute function
@@ -404,7 +359,6 @@ function removeFieldCard(flipParent) {
     flipParent.remove();
     isFlip = false;
     const fromDeck = updateDeck(deck);
-    // fieldCards.push(fromDeck);
     createNewFieldCard(fromDeck);
     checkVictory();
   }, 1200);
@@ -494,7 +448,7 @@ function increaseCoinPoints(cPoints) {
   if (energy <= 0) {
     if (life - 1 <= 0) {
       // FIXME:pass a card name as parameter
-      alert("Game Over");
+      gameOver(cardName, "no-life");
     } else {
       life--;
       lifePoints.textContent = life;
@@ -606,13 +560,13 @@ function checkSilip() {
 
 buySilipMessage.addEventListener("click", buySilip);
 function buySilip() {
-  buyFlag=1;
+  buyFlag = 1;
   playSilipAudio();
   // Check if player has energy
   if (energy <= 0) {
     if (life - 1 <= 0) {
       // FIXME:pass a card name as parameter
-      alert("Game Over");
+      gameOver(cardName, "no-life");
       playGameOverAudio();
     } else {
       life--;
@@ -640,10 +594,15 @@ function buySilip() {
   buySilipMessage.classList.add("hidden");
   // remove text for no pasilip label
   silipNotAvailableMessage.classList.add("hidden");
+
   // get all life damage cards in the field
-  const lifeDmgCards = document.querySelectorAll(".card");
+  const lifeDmgCards = document.querySelectorAll(
+    ".flip-card-inner:not(.open-silip)"
+  );
   for (const lifeDmgCard of lifeDmgCards) {
-    if (lifeDmgCard.getAttribute("card-type") === "lifedmg") {
+    console.log(lifeDmgCard);
+    const parentLifeDmgCard = lifeDmgCard.closest(".card");
+    if (parentLifeDmgCard.getAttribute("card-type") === "lifedmg") {
       const silipIconContainer = document.createElement("div");
       silipIconContainer.setAttribute(
         "class",
@@ -652,49 +611,60 @@ function buySilip() {
       const silipIcon = document.createElement("img");
       silipIcon.setAttribute("src", "../assets/icons/pasilip.png");
       silipIconContainer.appendChild(silipIcon);
-      lifeDmgCard.appendChild(silipIconContainer);
-      lifeDmgCard.closest(".card").classList.add("life-dmg-card-buy");
+      parentLifeDmgCard.appendChild(silipIconContainer);
+      parentLifeDmgCard.closest(".card").classList.add("life-dmg-card-buy");
     }
   }
 }
 let flipCardTest = null;
-function useSilip(flipCard) {
-  flipCardTest=flipCard;
-  const continueButton = document.querySelector(".btn-continue");
-  const cancelButton = document.querySelector(".btn-cancel");
-  const silipCountText = document.querySelector(".pasilip-count-text");
-
-  silipCountText.textContent = silipCount;
-  overlay.classList.remove("hidden");
-  silipPopUp.classList.remove("hidden");
-
-  //user use silip
-  continueButton.addEventListener("click", function () {
-  console.log(flipCardTest);
+function useSilip(flipCard, cardValue, cardName) {
+  console.log(flipCard);
+  if (!flipCard.classList.contains("open-silip")) {
+    flipCardTest = flipCard;
+    const continueButton = document.querySelector(".btn-continue");
+    const cancelButton = document.querySelector(".btn-cancel");
+    const silipCountText = document.querySelector(".pasilip-count-text");
+    buttonContainer = document.querySelector(".silip-pop-up-button");
+    continueButton.parentNode.removeChild(continueButton);
+    newContinueButton = document.createElement("button");
+    newContinueButton.classList.add("pop-up-btn", "btn-continue");
+    newContinueButton.textContent = "continue";
+    buttonContainer.insertBefore(newContinueButton, cancelButton);
+    silipCountText.textContent = silipCount;
+    overlay.classList.remove("hidden");
+    silipPopUp.classList.remove("hidden");
     flipCard.removeAttribute("disabled");
-    flipCard.classList.add("open-silip");
+    //user use silip
+    newContinueButton.addEventListener("click", function () {
+      console.log(flipCardTest);
+      flipCard.classList.add("open-silip");
+      const lifeDmgCards = document.querySelectorAll(".life-dmg-card-buy");
+      const silipIcons = document.querySelectorAll(".silip-icon");
+      flipCard.style.transform = "rotateY(180deg)";
+      silipCount = 0;
+      nextSilip = 2;
+      overlay.classList.add("hidden");
+      silipPopUp.classList.add("hidden");
+      isFlip = true;
+      buyFlag = 0;
 
-    const lifeDmgCards = document.querySelectorAll(".life-dmg-card-buy");
-    const silipIcons = document.querySelectorAll(".silip-icon");
-    flipCard.style.transform = "rotateY(180deg)";
-    silipCount = 0;
-    nextSilip = 2;
-    overlay.classList.add("hidden");
-    silipPopUp.classList.add("hidden");
-    isFlip = true;
+      for (const silipIcon of silipIcons) {
+        silipIcon.parentNode.removeChild(silipIcon);
+      }
+      checkSilip();
+    });
 
-    for (const silipIcon of silipIcons) {
-      silipIcon.parentNode.removeChild(silipIcon);
-    }
-    checkSilip();
-  });
-
-  cancelButton.addEventListener("click", function () {
-    console.log(flipCardTest);
-    overlay.classList.add("hidden");
-    silipPopUp.classList.add("hidden");
-    isFlip = false;
-  });
+    cancelButton.addEventListener("click", function () {
+      console.log(flipCardTest);
+      overlay.classList.add("hidden");
+      silipPopUp.classList.add("hidden");
+      isFlip = false;
+    });
+  } else {
+    const flipParentLifeDmg = flipCard.parentElement;
+    decreaseLifePoints(Number(cardValue), cardName);
+    flipParentLifeDmg.remove();
+  }
 }
 
 function displayLifeNotification(lPoints, notificationType) {
@@ -757,9 +727,8 @@ function checkVictory() {
   if (container.children.length === 1 && life > 0) {
     overlay.classList.remove("hidden");
     victoryParent.classList.remove("hidden");
-    audio.pause();
+   
     playVictoryAudio();
-    // FIXME: restart button not working
   }
   return;
 }
@@ -817,7 +786,7 @@ function gameOver(cardName) {
   overlay.classList.remove("hidden");
   gameOverClass.classList.remove("hidden");
 }
-const gameOverQuote = generateRandomQuote(covidQuotesArray);
+
 function generateRandomQuote(array) {
   let curId = array.length;
   // There remain elements to shuffle
