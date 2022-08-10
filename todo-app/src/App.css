@@ -1,38 +1,226 @@
-.App {
-  text-align: center;
+:root {
+  --side: #f8f8f8;
+  --main: #fdfdfd;
+  --text: #5d6c7b;
+  --accent: #ebeef5;
+  --dark: #4f5862;
+  --red: #f33855;
+  --light-red: #f7e4de;
+  --blue: #5396e4;
+  --light-blue: #dde8f4;
+  --yellow: #fcba50;
+  --light-yellow: #fbf1e7;
+  --green: #dcf3f4;
+  --light-green: #43bebf;
+  --task-text: #858f99;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.container {
+  border-radius: 10px;
+  margin: 0 auto;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.grid {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas:
+    "sidebar main main"
+    "sidebar main main"
+    "sidebar main main";
 }
-
-.App-header {
-  background-color: #282c34;
+.sidebar {
+  grid-area: sidebar;
+  background-color: var(--side);
   min-height: 100vh;
+  padding: 2em 1.8em;
+  color: var(--text);
+  font-size: 1.6rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+}
+.sidebar h1 {
+  text-align: center;
+  font-weight: 300;
+}
+.sidebar h1:last-of-type {
+  margin-bottom: 0.5em;
+}
+.sidebar button {
+  background: var(--dark);
+  border: none;
+  font-size: 1.8rem;
+  padding: 1.5rem;
+  font-family: inherit;
+  color: #ffff;
+  border-radius: 5px;
+  margin-top: auto;
+  cursor: pointer;
+}
+.TaskList {
+  overflow: auto;
+  max-height: 500px;
+}
+.TaskList ul {
+  list-style: none;
+  margin: 2.4em 0;
+}
+.TaskList li {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 1.2em;
+  padding: 0.5em;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.TaskList li:hover {
+  background-color: #d4d8e0;
+}
+.TaskList li:first-of-type {
+  background-color: var(--accent);
+}
+hr {
+  border: 2px solid var(--dark);
+}
+.main {
+  padding: 2em 2.8em;
+  grid-area: main;
+  min-height: 100vh;
+  background-color: var(--main);
+}
+.MainHeader,
+.SecondMainHeader {
+  display: flex;
+  justify-content: space-between;
+  margin: 1.5em 0;
+}
+.MainHeader h1 {
+  font-size: 3.6rem;
+  /* color: var(--red); */
+}
+.SecondMainHeader {
+  margin: 3.5em 0;
+}
+.SecondMainHeader button {
+  cursor: pointer;
+  padding: 0.8em 2.3em;
+  border: none;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 1.8rem;
+  /* background: var(--red); */
+  /* color: var(--light-red); */
+}
+.TaskContainer {
+  max-height: 520px;
+  overflow: auto;
+  background: var(--accent);
+  padding: 2em;
+  padding-bottom: 0;
+  border-radius: 5px;
+}
+.TaskContainer div:first-of-type {
+  position: relative;
+}
+.TaskContainer div:first-of-type > label {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  padding-top: 2px;
+}
+/* On mouse-over, add a grey background color */
+.checkerContainer:hover input ~ .checker {
+  background-color: #d4d8e0;
 }
 
-.App-link {
-  color: #61dafb;
+/* When the checkbox is checked, add a blue background */
+.checkerContainer input:checked ~ .checker {
+  /* background-color: var(--red); */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Create the checker/indicator (hidden when not checked) */
+.checker:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checker when checked */
+.checkerContainer input:checked ~ .checker:after {
+  display: block;
+}
+
+/* Style the checker/indicator */
+.checkerContainer .checker:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: var(--accent);
+}
+select {
+  cursor: pointer;
+  font-family: inherit;
+  width: 20%;
+  padding: 0.5em;
+  border: none;
+  box-shadow: 2px 4px 5px #e5e5e5;
+  /* color: var(--red); */
+  font-size: 1.6em;
+  border-radius: 5px;
+  font-weight: 400;
+}
+.Task {
+  margin-bottom: 1.8rem;
+  border-radius: 3px;
+  color: var(--task-text);
+  background: #ffffff;
+  padding: 1.5rem;
+  font-size: 1.8rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* COLOR THEME */
+.red {
+  background: var(--red);
+}
+.light-red {
+  background: var(--red);
+}
+.blue {
+  background: var(--blue);
+}
+.yellow {
+  background: var(--yellow);
+}
+.light-yellow {
+  background: var(--light-yellow);
+}
+.green {
+  background: var(--green);
+}
+.light-green {
+  background: var(--light-green);
 }
