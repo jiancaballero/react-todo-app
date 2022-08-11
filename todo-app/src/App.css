@@ -1,5 +1,5 @@
 :root {
-  --side: #f8f8f8;
+  --side: #fcfcfc;
   --main: #fdfdfd;
   --text: #5d6c7b;
   --accent: #ebeef5;
@@ -28,6 +28,9 @@
     "sidebar main main"
     "sidebar main main";
 }
+.task-menu-icon {
+  margin-right: 0.8em;
+}
 .sidebar {
   grid-area: sidebar;
   background-color: var(--side);
@@ -45,7 +48,8 @@
 .sidebar h1:last-of-type {
   margin-bottom: 0.5em;
 }
-.sidebar button {
+.sidebar>a {
+  text-decoration: none;
   background: var(--dark);
   border: none;
   font-size: 1.8rem;
@@ -53,8 +57,10 @@
   font-family: inherit;
   color: #ffff;
   border-radius: 5px;
-  margin-top: auto;
+  margin-top: 2em;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
 }
 .TaskList {
   overflow: auto;
@@ -65,21 +71,30 @@
   margin: 2.4em 0;
 }
 .TaskList li {
-  display: flex;
-  justify-content: space-between;
   font-weight: 400;
   font-size: 2rem;
   margin-bottom: 1.2em;
-  padding: 0.5em;
   border-radius: 3px;
   cursor: pointer;
 }
-.TaskList li:hover {
-  background-color: #d4d8e0;
+.TaskList a {
+  text-decoration: none;
+  color: var(--task-text);
+
+  width: 100%;
+  padding: 1em;
+  display: flex;
+  justify-content: space-between;
 }
-.TaskList li:first-of-type {
+/* .TaskList li:hover {
+  background-color: var(--accent);
+} */
+.TaskList a:hover,
+a:focus,
+a:active {
   background-color: var(--accent);
 }
+
 hr {
   border: 2px solid var(--dark);
 }
@@ -97,20 +112,21 @@ hr {
 }
 .MainHeader h1 {
   font-size: 3.6rem;
-  /* color: var(--red); */
+  color: var(--red);
 }
 .SecondMainHeader {
   margin: 3.5em 0;
 }
-.SecondMainHeader button {
+.SecondMainHeader>a {
+  text-decoration: none;
   cursor: pointer;
-  padding: 0.8em 2.3em;
+  padding: 0.8em 1em;
   border: none;
   border-radius: 5px;
   font-family: inherit;
   font-size: 1.8rem;
-  /* background: var(--red); */
-  /* color: var(--light-red); */
+  background: var(--red);
+  color: var(--light-red);
 }
 .TaskContainer {
   max-height: 520px;
@@ -132,7 +148,7 @@ hr {
 }
 /* On mouse-over, add a grey background color */
 .checkerContainer:hover input ~ .checker {
-  background-color: #d4d8e0;
+  background-color: var(--task-text);
 }
 
 /* When the checkbox is checked, add a blue background */
@@ -177,7 +193,7 @@ input[type="checkbox"] {
   left: 0;
   height: 25px;
   width: 25px;
-  background-color: var(--accent);
+  background-color: #d4d8e0;
 }
 select {
   cursor: pointer;
@@ -223,4 +239,77 @@ select {
 }
 .light-green {
   background: var(--light-green);
+}
+.overlay {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(0.5px);
+  z-index: 5;
+}
+.modal {
+  background: #f7f7f7;
+  width: 60%;
+  border-radius: 5px;
+  padding: 2em;
+  z-index: 6;
+  top: 20%;
+  position: absolute;
+}
+.modal-body {
+  padding: 2em 0;
+}
+.modal-body > div{
+  margin-bottom:3.5em;
+  display:flex;
+  gap:30px;
+  align-items:flex-end;
+}
+.modal-body input[type="text"] {
+  
+  padding:.3em .5em;
+  width: 80%;
+  height: 40px;
+  border: none;
+  background: var(--accent);
+  font-family: inherit;
+  font-size:1.8rem;
+}
+.modal-body label {
+  align-self: flex-end; 
+  font-family:inherit;
+  font-size:2rem;
+ 
+}
+.modal-body input[type="radio"] {
+  margin-right:1.5em;
+  height: 2rem;
+  width: 2rem;
+ 
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+.modal-footer > a {
+  font-size:1.6rem;
+  display: inline-block;
+  text-decoration: none;
+  padding: 0.8em 2.6em;
+  border-radius: 5px;
+}
+.modal-cancel{
+  color:var(--text);
+  border: 3px solid var(--text);
+}
+.modal-ok{
+  color:var(--side);
+  background-color:var(--text);
 }
