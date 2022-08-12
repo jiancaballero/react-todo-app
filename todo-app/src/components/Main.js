@@ -4,47 +4,27 @@ import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import Tasks from "./Tasks";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
+import FilterStatus from "./FilterStatus";
 const Main = ({ taskLists, taskCount, getTaskList, handleTaskStatus }) => {
-  const params = useParams();
-  const taskID = params.taskID
-
-
-  const status = "pending";
+  const { taskID } = useParams();
   const lists = taskLists.filter((list) => list.id === taskID);
   const listObj = Object.assign({}, ...lists);
   const tasks = listObj.tasks;
-  const statusTask = tasks.flat().filter((task) => task.status === status);
-
-  const allTasks = tasks
-    .flat()
-    .filter((task) => task.status === status)
-    .map((task) => {
-      return (
-        <Tasks
-          taskID={taskID}
-          id={task.id}
-          name={task.name}
-          status={task.status}
-          handleTaskStatus={handleTaskStatus}
-        />
-      );
-    });
+  const allTasks = tasks.map((task) => {
+    return (
+      <Tasks
+        taskID={taskID}
+        id={task.id}
+        name={task.name}
+        status={task.status}
+        handleTaskStatus={handleTaskStatus}
+      />
+    );
+  });
 
   const getList = () => {
     getTaskList(taskID);
   };
-
-  // const allTasks = subtasks.map((task) => {
-  //   return (
-  //     <Tasks
-  //       id={task.id}
-  //       name={task.name}
-  //       status={task.status}
-  //       category={task.name}
-  //       color={task.color}
-  //     />
-  //   );
-  // });
 
   return (
     <div className="main">
@@ -57,11 +37,7 @@ const Main = ({ taskLists, taskCount, getTaskList, handleTaskStatus }) => {
           Add Task <FontAwesomeIcon icon={faCirclePlus} />
         </Link>
 
-        <select>
-          <option>All</option>
-          <option>Pending</option>
-          <option>Done</option>
-        </select>
+        <FilterStatus taskID={taskID} />
       </div>
 
       <div className="TaskContainer">{allTasks}</div>

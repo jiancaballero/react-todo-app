@@ -9,6 +9,7 @@ import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import Side from "./components/Side";
 import AddTaskList from "./components/AddTaskList";
 import AddTask from "./components/AddTask";
+import DoneTask from "./components/DoneTask";
 
 function App() {
   const [taskLists, setTaskLists] = useState([
@@ -70,7 +71,6 @@ function App() {
       ],
     },
   ]);
-
   const [tasks, setTasks] = useState([]);
   const [taskCount, setTaskCount] = useState(0);
   const [listID, setListID] = useState("");
@@ -82,12 +82,14 @@ function App() {
     setListID(listObj.id);
   };
 
+ 
+  // ADD TASK CATEGORY
   const addNewTaskList = (taskList) => {
     const taskCopy = [...taskLists, taskList];
-    console.log(taskList);
     setTaskLists(taskCopy);
   };
 
+  // ADD MAIN TASKS
   const addNewTask = (taskID, newTask) => {
     if (newTask) {
       const taskCopy = [...taskLists];
@@ -148,7 +150,7 @@ function App() {
         </div>
         <Routes>
           <Route
-            path=":taskID/tasks"
+            path=":taskID"
             element={
               <Main
                 taskLists={taskLists}
@@ -175,6 +177,7 @@ function App() {
               />
             }
           />
+          <Route path=":taskID/:status" element={<DoneTask tasks={taskLists}  handleTaskStatus={handleTaskStatus}/>} />
         </Routes>
 
         {/* <SideBar
