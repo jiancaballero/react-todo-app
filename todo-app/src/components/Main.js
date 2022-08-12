@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+
 import Tasks from "./Tasks";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import FilterStatus from "./FilterStatus";
-const Main = ({ taskLists, taskCount, getTaskList, handleTaskStatus }) => {
+import DoneTask from "./DoneTask";
+const Main = ({ taskLists, taskCount, getTaskID, handleTaskStatus }) => {
   const { taskID } = useParams();
   const lists = taskLists.filter((list) => list.id === taskID);
   const listObj = Object.assign({}, ...lists);
@@ -22,8 +24,8 @@ const Main = ({ taskLists, taskCount, getTaskList, handleTaskStatus }) => {
     );
   });
 
-  const getList = () => {
-    getTaskList(taskID);
+  const getListID = () => {
+    getTaskID(taskID);
   };
 
   return (
@@ -33,7 +35,7 @@ const Main = ({ taskLists, taskCount, getTaskList, handleTaskStatus }) => {
         <h1>{taskCount}</h1>
       </div>
       <div className="SecondMainHeader">
-        <Link to="/add-task" onClick={getList}>
+        <Link to="/add-task" onClick={getListID}>
           Add Task <FontAwesomeIcon icon={faCirclePlus} />
         </Link>
 

@@ -12,6 +12,8 @@ import AddTask from "./components/AddTask";
 import DoneTask from "./components/DoneTask";
 
 function App() {
+
+  // LIST OF TASKS
   const [taskLists, setTaskLists] = useState([
     {
       id: uuidv4(),
@@ -71,15 +73,18 @@ function App() {
       ],
     },
   ]);
-  const [tasks, setTasks] = useState([]);
+
+  // const [tasks, setTasks] = useState([]);
   const [taskCount, setTaskCount] = useState(0);
+  
+  // SET PARENT ID
   const [listID, setListID] = useState("");
-  const getTaskList = (id) => {
-    const listsCopy = [...taskLists];
-    const list = listsCopy.filter((copy) => copy.id === id);
-    const listObj = Object.assign({}, ...list);
-    setTasks(listObj.tasks);
-    setListID(listObj.id);
+  const getTaskID = (id) => {
+    // const listsCopy = [...taskLists];
+    // const list = listsCopy.filter((copy) => copy.id === id);
+    // const listObj = Object.assign({}, ...list);
+    // setTasks(listObj.tasks);
+    setListID(id);
   };
 
  
@@ -155,7 +160,7 @@ function App() {
               <Main
                 taskLists={taskLists}
                 taskCount={taskCount}
-                getTaskList={getTaskList}
+                getTaskID={getTaskID}
                 handleTaskStatus={handleTaskStatus}
               />
             }
@@ -173,16 +178,16 @@ function App() {
                 id={uuidv4()}
                 listID={listID}
                 addNewTask={addNewTask}
-                tasks={tasks}
+                
               />
             }
           />
-          <Route path=":taskID/:status" element={<DoneTask tasks={taskLists}  handleTaskStatus={handleTaskStatus}/>} />
+          <Route path=":taskID/:status" element={<DoneTask tasks={taskLists}  handleTaskStatus={handleTaskStatus} getTaskID={getTaskID}/>} />
         </Routes>
 
         {/* <SideBar
           taskLists={taskLists}
-          getTaskList={getTaskList}
+          getTaskID={getTaskID}
           taskCount={taskCount}
         /> */}
         {/* <Main subtasks={subTasks} task={taskProperty} taskCount={taskCount} /> */}

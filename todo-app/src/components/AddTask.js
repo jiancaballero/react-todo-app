@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-const AddTask = ({ id, listID, tasks,addNewTask }) => {
+const AddTask = ({ id, listID, addNewTask }) => {
   const [newTask, setNewTask] = useState([]);
   const getInput = (e) => {
     e.preventDefault();
     const nameInput = e.target.value;
     const newTaskObj = {
       id: id,
-      listID:listID,
+      listID: listID,
       name: nameInput,
       status: "pending",
     };
@@ -16,9 +16,9 @@ const AddTask = ({ id, listID, tasks,addNewTask }) => {
   };
 
   const taskAdd = (e) => {
-    addNewTask(listID,newTask)
+    addNewTask(listID, newTask);
   };
-  
+
   return (
     <div className="overlay">
       <div className="modal">
@@ -39,7 +39,7 @@ const AddTask = ({ id, listID, tasks,addNewTask }) => {
             Cancel
           </Link>
           */}
-          <Link to={listID}className="modal-ok" onClick={taskAdd}>
+          <Link to={listID} className="modal-ok" onClick={taskAdd}>
             OK
           </Link>
         </div>
