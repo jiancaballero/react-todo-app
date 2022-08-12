@@ -8,7 +8,7 @@ const Side = ({ taskLists, taskCount }) => {
     
       {taskLists.map((list) => (
         <li>
-          <Link to={list.id} >
+          <Link to={list.id+'/tasks/'} >
             <span>
               <span className="task-menu-icon">
                 <FontAwesomeIcon icon={faBars} />

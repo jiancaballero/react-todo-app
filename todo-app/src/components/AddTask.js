@@ -39,7 +39,7 @@ const AddTask = ({ id, listID, tasks,addNewTask }) => {
             Cancel
           </Link>
           */}
-          <Link to={listID} className="modal-ok" onClick={taskAdd}>
+          <Link to={listID}className="modal-ok" onClick={taskAdd}>
             OK
           </Link>
         </div>

@@ -5,9 +5,11 @@ import Tasks from "./Tasks";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 const Main = ({ taskLists, taskCount, getTaskList, handleTaskStatus }) => {
-  const { taskID } = useParams();
+  const params = useParams();
+  const taskID = params.taskID
 
-  const status = "done";
+
+  const status = "pending";
   const lists = taskLists.filter((list) => list.id === taskID);
   const listObj = Object.assign({}, ...lists);
   const tasks = listObj.tasks;
@@ -27,7 +29,6 @@ const Main = ({ taskLists, taskCount, getTaskList, handleTaskStatus }) => {
         />
       );
     });
- 
 
   const getList = () => {
     getTaskList(taskID);

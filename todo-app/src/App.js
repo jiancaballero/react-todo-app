@@ -148,7 +148,7 @@ function App() {
         </div>
         <Routes>
           <Route
-            path=":taskID"
+            path=":taskID/tasks"
             element={
               <Main
                 taskLists={taskLists}
