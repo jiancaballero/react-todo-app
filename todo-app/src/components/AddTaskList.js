@@ -24,7 +24,9 @@ const AddTaskList = ({ id, addNewTaskList }) => {
 
   const addTask = (e) => {
     // e.preventDefault();
-    addNewTaskList(task);
+    if (task.name) {
+      addNewTaskList(task);
+    }
   };
   return (
     <div className="overlay">

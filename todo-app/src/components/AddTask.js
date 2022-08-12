@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 const AddTask = ({ id, listID, tasks,addNewTask }) => {
-  const [newTask, setNewTask] = useState(tasks);
+  const [newTask, setNewTask] = useState([]);
   const getInput = (e) => {
     e.preventDefault();
     const nameInput = e.target.value;

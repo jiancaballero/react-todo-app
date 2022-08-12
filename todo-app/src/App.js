@@ -21,19 +21,19 @@ function App() {
           taskID: 0,
           id: uuidv4(),
           name: "Pay Bills",
-          status: "Pending",
+          status: "pending",
         },
         {
           taskID: 0,
           id: uuidv4(),
           name: "Pay Rent",
-          status: "Pending",
+          status: "pending",
         },
         {
           taskID: 0,
           id: uuidv4(),
           name: "Visit Clinic",
-          status: "Pending",
+          status: "done",
         },
       ],
     },
@@ -46,13 +46,13 @@ function App() {
           taskID: 0,
           id: uuidv4(),
           name: "Add a feature",
-          status: "Done",
+          status: "pending",
         },
         {
           taskID: 0,
           id: uuidv4(),
           name: "Debug Code",
-          status: "Pending",
+          status: "done",
         },
       ],
     },
@@ -65,7 +65,7 @@ function App() {
           taskID: 0,
           id: uuidv4(),
           name: "Book a Ticket",
-          status: "Pending",
+          status: "pending",
         },
       ],
     },
@@ -89,19 +89,48 @@ function App() {
   };
 
   const addNewTask = (taskID, newTask) => {
-    const taskCopy = [...taskLists];
-    let allTasks = [];
-    let replaceTask = {};
+    if (newTask) {
+      const taskCopy = [...taskLists];
+      let allTasks = [];
+      let replaceTask = {};
 
-    taskCopy.forEach((copy) => {
-      if (copy.id === taskID) {
-        allTasks = [...copy.tasks, ...newTask];
-        replaceTask = { ...copy, tasks: allTasks };
-      }
-    });
-    const index = taskCopy.findIndex(copy=>copy.id===taskID);
-    taskCopy.splice(index,1,replaceTask);
-    setTaskLists(taskCopy);
+      taskCopy.forEach((copy) => {
+        if (copy.id === taskID) {
+          allTasks = [...copy.tasks, ...newTask];
+          replaceTask = { ...copy, tasks: allTasks };
+        }
+      });
+      const index = taskCopy.findIndex((copy) => copy.id === taskID);
+      taskCopy.splice(index, 1, replaceTask);
+      return setTaskLists(taskCopy);
+    }
+  };
+
+  // CHECK AND UPDATE STATUS
+  const doneTasks = taskLists
+    .map((task) => task.tasks)
+    .flat()
+    .filter((task) => task.status === "done");
+  const pendingTasks = taskLists
+    .map((task) => task.tasks)
+    .flat()
+    .filter((task) => task.status === "pending");
+
+  const handleTaskStatus = (taskID, id) => {
+    let listCopy = [...taskLists];
+    const tasks = listCopy
+      .filter((list) => list.id === taskID)
+      .map((list) => list.tasks)
+      .flat();
+    const index = tasks.findIndex((task) => task.id === id);
+    if (tasks[index].status === "done") {
+      tasks[index].status = "pending";
+      return setTaskLists(listCopy);
+    }
+    if (tasks[index].status === "pending") {
+      tasks[index].status = "done";
+      return setTaskLists(listCopy);
+    }
   };
 
   return (
@@ -117,7 +146,6 @@ function App() {
           <div className="TaskList">
             <Side taskLists={taskLists} taskCount={taskCount} />
           </div>
-         
         </div>
         <Routes>
           <Route
@@ -127,6 +155,7 @@ function App() {
                 taskLists={taskLists}
                 taskCount={taskCount}
                 getTaskList={getTaskList}
+                handleTaskStatus={handleTaskStatus}
               />
             }
           ></Route>
