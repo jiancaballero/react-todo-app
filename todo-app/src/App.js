@@ -132,7 +132,6 @@ function App() {
       return setTaskLists(listCopy);
     }
   };
-
   return (
     <div className="container">
       <div className="grid">

@@ -7,22 +7,28 @@ import { Link } from "react-router-dom";
 const Main = ({ taskLists, taskCount, getTaskList, handleTaskStatus }) => {
   const { taskID } = useParams();
 
+  const status = "done";
   const lists = taskLists.filter((list) => list.id === taskID);
   const listObj = Object.assign({}, ...lists);
   const tasks = listObj.tasks;
+  const statusTask = tasks.flat().filter((task) => task.status === status);
 
-  const allTasks = tasks.map((task) => {
-    return (
-      <Tasks
-        taskID={taskID}
-        id={task.id}
-        name={task.name}
-        status={task.status}
-        handleTaskStatus={handleTaskStatus}
-      />
-    );
-  });
+  const allTasks = tasks
+    .flat()
+    .filter((task) => task.status === status)
+    .map((task) => {
+      return (
+        <Tasks
+          taskID={taskID}
+          id={task.id}
+          name={task.name}
+          status={task.status}
+          handleTaskStatus={handleTaskStatus}
+        />
+      );
+    });
  
+
   const getList = () => {
     getTaskList(taskID);
   };

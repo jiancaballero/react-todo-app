@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React,{useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
-const Tasks = ({ taskID, id, name, status, handleTaskStatus }) => {
-  const updateStatus = () => {
+import { faPencil,faTrash } from "@fortawesome/free-solid-svg-icons";
+const Tasks = ({taskID, id,name,status,handleTaskStatus}) => {
+  // const [taskStatus,setTaskStatus] = useState(false) 
+  const updateStatus = (e) => {
+   
     handleTaskStatus(taskID, id);
-  };
+  }
   return (
     <div className="Task">
       <div>
@@ -15,8 +17,8 @@ const Tasks = ({ taskID, id, name, status, handleTaskStatus }) => {
         </label>
       </div>
       <div>
-        <FontAwesomeIcon icon={faPencil} />
-        <FontAwesomeIcon icon={faTrash} />
+       <FontAwesomeIcon icon={faPencil}/>
+       <FontAwesomeIcon icon={faTrash}/>
       </div>
     </div>
   );
