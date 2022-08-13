@@ -13,63 +13,35 @@ import FilterTaskPage from "./components/FilterTaskPage";
 import PageNotFound from "./components/PageNotFound";
 
 function App() {
-  // LIST OF TASKS
+  // ORIGINAL TASKS
   // FIXME: list id of default list are not the same with the id of the list.
-
   const [taskLists, setTaskLists] = useState([
     {
       id: uuidv4(),
-      name: "Important",
-      
+      name: "Weekly",
       tasks: [
         {
           taskID: 0,
           id: uuidv4(),
-          name: "Pay Bills",
+          name: "Fix Bed",
           status: "pending",
         },
         {
           taskID: 0,
           id: uuidv4(),
-          name: "Pay Rent",
-          status: "pending",
-        },
-        {
-          taskID: 0,
-          id: uuidv4(),
-          name: "Visit Clinic",
+          name: "Walk dog",
           status: "done",
         },
-      ],
-    },
-    {
-      id: uuidv4(),
-      name: "Work",
-   
-      tasks: [
         {
           taskID: 0,
           id: uuidv4(),
-          name: "Add a feature",
+          name: "Clean bathroom",
           status: "pending",
         },
         {
           taskID: 0,
           id: uuidv4(),
-          name: "Debug Code",
-          status: "done",
-        },
-      ],
-    },
-    {
-      id: uuidv4(),
-      name: "Travel",
-      
-      tasks: [
-        {
-          taskID: 0,
-          id: uuidv4(),
-          name: "Book a Ticket",
+          name: "Clean PC",
           status: "pending",
         },
       ],
@@ -148,9 +120,6 @@ function App() {
     setPendingCount(pendingTasks.length);
   }, [pendingTasks]);
 
-  //COUNT OF PENDING TASK PER CATEOGRY
-  // TODO: pending task count for each list 
-
   const handleTaskStatus = (taskID, id) => {
     let listCopy = [...taskLists];
     const tasks = listCopy
@@ -167,18 +136,20 @@ function App() {
       return setTaskLists(listCopy);
     }
   };
+
+  // RENDERING 
   return (
     <div className="container">
       <div className="grid">
         <div className="sidebar">
           <h1>
             You have <span className="total-task-count">{pendingCount} </span>
-            pending tasks
+            pending task{pendingCount!=0?<span>s</span>:""}
           </h1>
-          {pendingCount!=0 ? <h1>Let's do this!</h1> : ""}
+          {pendingCount != 0 ? <h1>Let's do this!</h1> : ""}
           <hr></hr>
           <Link to="/add-task-list">
-            Add List <FontAwesomeIcon icon={faCirclePlus} />
+            Add Category <FontAwesomeIcon icon={faCirclePlus} />
           </Link>
           <div className="TaskList">
             <Side taskLists={taskLists} deleteList={deleteList} />
@@ -199,14 +170,14 @@ function App() {
           <Route
             path="/add-task-list"
             element={
-              <AddTaskList id={uuidv4()} addNewTaskList={addNewTaskList} />
+              <AddTaskList id={uuidv4()} addNewTaskList={addNewTaskList} taskList={taskLists} />
             }
           />
           <Route
             path="/add-task"
             element={
               <AddTask
-                tasks={taskLists}
+                taskList={taskLists}
                 id={uuidv4()}
                 listID={listID}
                 addNewTask={addNewTask}

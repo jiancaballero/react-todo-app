@@ -8,13 +8,7 @@ import { Link } from "react-router-dom";
 
 import FilterStatus from "./FilterStatus";
 import NoTasks from "./NoTasks";
-const Main = ({
-  taskLists,
-  taskCount,
-  getTaskID,
-  handleTaskStatus,
-  deleteTask,
-}) => {
+const Main = ({ taskLists, getTaskID, handleTaskStatus, deleteTask }) => {
   // FIXME: kapag pumindot ng list tas nirefresh nawawala yung content
   const { taskID } = useParams();
   const lists = taskLists.filter((list) => list.id === taskID);
@@ -41,13 +35,11 @@ const Main = ({
     <div className="main">
       <div className="MainHeader">
         <h1>{listObj.name}</h1>
-        <h1>{taskCount}</h1>
       </div>
       <div className="SecondMainHeader">
         <Link to="/add-task" onClick={getListID}>
           Add Task <FontAwesomeIcon icon={faCirclePlus} />
         </Link>
-
         <FilterStatus taskID={taskID} />
       </div>
 

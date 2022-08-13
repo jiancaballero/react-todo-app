@@ -7,8 +7,7 @@ const FilterStatus = ({ taskID }) => {
   const handleFilter = (e) => {
     const filterValue = e.target.value;
     navigate(`/${taskID}/${filterValue}`);
-    // get status from Link
-    //pass the taskID and setState as a url
+    
   };
 
   // FIXME: nagiging ALL yung na naseselect kapag  after maselect ang ALL KAHIT NA IBA ISELECT

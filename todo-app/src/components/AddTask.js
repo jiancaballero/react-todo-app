@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const AddTask = ({ id, listID, addNewTask }) => {
+const AddTask = ({ id, listID, addNewTask, taskList }) => {
   const navigate = useNavigate();
   const [newTask, setNewTask] = useState([
     {
@@ -23,41 +23,44 @@ const AddTask = ({ id, listID, addNewTask }) => {
     const allTasks = [newTaskObj];
     setNewTask(allTasks);
   };
+  const tasks = taskList.map((list) => list.tasks).flat();
+  const newTaskObj = Object.assign({}, ...newTask);
+  const duplicate = tasks.filter(
+    (task) =>
+      task.name
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s]/gi, "") ===
+      newTaskObj.name
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s]/gi, "")
+  );
 
-  const taskAdd = (e) => {
-    const hasTask = checkHasTask(newTask)
-    const hasDuplicate = checkDuplicateTask(newTask)
-
-    if(hasTask && hasDuplicate) {
+  const taskAdd = () => {
+    if (newTaskObj.name === "") {
+      alert("Please input a task.");
+    } else if (duplicate.length) {
+      alert("Task already exists");
+    } else {
       addNewTask(listID, newTask);
       navigate(`/${listID}`);
-    
     }
   };
 
-  function checkHasTask(newTask) {
-    if (newTask[0].name !== "") {
-      return true;
-    } else {
-      alert("Please input a task.");
-      return false;
-    }
-  }
-  function checkDuplicateTask(newTask){
-    // TODO:check for duplicates
-  }
+
 
   return (
     <div className="overlay">
       <div className="modal">
-        <div className="modal-title">
+        <div className="modal-title ">
           <h1>NEW TASK</h1>
           <hr></hr>
         </div>
         <div className="modal-body">
           <div>
             <form autocomplete="off">
-              <label>New Task:</label>
+              <label>Task Name:</label>
               <input type="text" name="name" onChange={getInput}></input>
             </form>
           </div>

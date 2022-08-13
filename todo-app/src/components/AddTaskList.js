@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRectangleXmark } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
-const AddTaskList = ({ id, addNewTaskList }) => {
+const AddTaskList = ({ id, addNewTaskList, taskList }) => {
+  // const [duplicate,setDuplicate]=useState(false);
+  // const[hasTask,setHasTask]=useState(false);
+
   const navigate = useNavigate();
   const [task, setTask] = useState({
     id: id,
@@ -18,75 +21,42 @@ const AddTaskList = ({ id, addNewTaskList }) => {
         break;
     }
   };
-
+  const duplicate = taskList.filter(
+    (list) =>
+      list.name
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s]/gi, "") ===
+      task.name
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s]/gi, "")
+  );
   const addTask = (e) => {
-    const hasTask = checkHasTask(task);
-    const hasNoDuplicate = checkDuplicateTask(task);
-    debugger;
-    if (hasTask && hasNoDuplicate) {
+    if (duplicate.length) {
+      alert("Category already exists.");
+    } else if (task.name === "") {
+      alert("Please input a name for the category.");
+    } else {
       addNewTaskList(task);
       navigate(`/${id}`);
     }
   };
 
-  function checkHasTask(task) {
-    if (task.name) {
-      return true;
-    } else {
-      alert("Please input a name for the list.");
-      return false;
-    }
-  }
-  function checkDuplicateTask(task) {
-    // TODO:check for duplicate
-  }
   return (
     <div className="overlay">
       <div className="modal">
         <div className="modal-title">
-          <h1>NEW LIST</h1>
+          <h1>NEW CATEGORY</h1>
           <hr></hr>
         </div>
         <div className="modal-body">
           <div>
             <form autocomplete="off">
-              <label>List Name :</label>
+              <label>Category:</label>
               <input type="text" name="name" onChange={getInput}></input>
             </form>
           </div>
-          {/* <div>
-            <label>Color :</label>
-            <div>
-              <input
-                type="radio"
-                name="color"
-                id="red-radio"
-                value="red"
-                onChange={getInput}
-              ></input>
-              <input
-                type="radio"
-                name="color"
-                id="yellow-radio"
-                value="yellow"
-                onChange={getInput}
-              ></input>
-              <input
-                type="radio"
-                name="color"
-                id="blue-radio"
-                value="blue"
-                onChange={getInput}
-              ></input>
-              <input
-                type="radio"
-                name="color"
-                id="green-radio"
-                value="green"
-                onChange={getInput}
-              ></input>
-            </div>
-          </div> */}
         </div>
         <div className="modal-footer">
           <Link to="/" className="modal-cancel">
