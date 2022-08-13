@@ -6,14 +6,14 @@ const FilterStatus = ({ taskID }) => {
   const navigate = useNavigate();
   const handleFilter = (e) => {
     const filterValue = e.target.value;
-    navigate(`${filterValue}`);
+    navigate(`/${taskID}/${filterValue}`);
     // get status from Link
     //pass the taskID and setState as a url
   };
 
   return (
     <select onChange={handleFilter}>
-      <option selected="selected" value="all">
+      <option selected="selected" value="">
         All
       </option>
       <option value="pending">Pending</option>

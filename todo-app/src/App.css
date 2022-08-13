@@ -3,15 +3,15 @@
   --main: #fdfdfd;
   --text: #5d6c7b;
   --accent: #ebeef5;
-  --dark: #4f5862;
-  --red: #f33855;
+  --dark: #2b2e44;
+  --red: #ec5553;
   --light-red: #f7e4de;
-  --blue: #5396e4;
-  --light-blue: #dde8f4;
-  --yellow: #fcba50;
+  --blue: #3577d4;
+  --light-blue: #5578c2;
+  /* --yellow: #fcba50;
   --light-yellow: #fbf1e7;
   --green: #dcf3f4;
-  --light-green: #43bebf;
+  --light-green: #43bebf; */
   --task-text: #858f99;
 }
 
@@ -29,7 +29,8 @@
     "sidebar main main";
 }
 .task-menu-icon {
-  margin-right: 0.8em;
+  display: flex;
+  align-items: center;
 }
 .sidebar {
   grid-area: sidebar;
@@ -44,11 +45,12 @@
 .sidebar h1 {
   text-align: center;
   font-weight: 300;
+  color: var(--dark);
 }
 .sidebar h1:last-of-type {
   margin-bottom: 0.5em;
 }
-.sidebar>a {
+.sidebar > a {
   text-decoration: none;
   background: var(--dark);
   border: none;
@@ -76,19 +78,31 @@
   margin-bottom: 1.2em;
   border-radius: 3px;
   cursor: pointer;
-}
-.TaskList a {
-  text-decoration: none;
-  color: var(--task-text);
-
-  width: 100%;
-  padding: 1em;
   display: flex;
-  justify-content: space-between;
+  gap: 5px;
 }
-/* .TaskList li:hover {
-  background-color: var(--accent);
-} */
+.TaskList li > div {
+  width: 100%;
+}
+
+.side-delete-task {
+  background: var(--accent);
+  color: var(--light-blue);
+  padding: 0.5em;
+  border-radius: 5px;
+}
+.side-delete-task:hover {
+  width: 25px;
+  height: 25px;
+}
+.side-bar-tasks {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--light-blue);
+  padding: 1em;
+  width: 100%;
+}
+
 .TaskList a:hover,
 a:focus,
 a:active {
@@ -117,7 +131,7 @@ hr {
 .SecondMainHeader {
   margin: 3.5em 0;
 }
-.SecondMainHeader>a {
+.SecondMainHeader > a {
   text-decoration: none;
   cursor: pointer;
   padding: 0.8em 1em;
@@ -127,6 +141,22 @@ hr {
   font-size: 1.8rem;
   background: var(--red);
   color: var(--light-red);
+}
+.NoTaskContainer {
+  height: 500px;
+  padding: 4em;
+  border-radius: 5px;
+  background: var(--accent);
+  color: var(--task-text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.NoTaskContainer h1 {
+  font-size: 4.8rem;
+  font-weight: 700;
+  opacity: 0.3;
 }
 .TaskContainer {
   max-height: 520px;
@@ -150,10 +180,14 @@ hr {
 .checkerContainer:hover input ~ .checker {
   background-color: var(--task-text);
 }
+.LabelDone {
+  text-decoration: line-through;
+  color: var(--red);
+}
 
 /* When the checkbox is checked, add a blue background */
 .checkerContainer input:checked ~ .checker {
-  /* background-color: var(--red); */
+  background-color: var(--red);
 }
 
 /* Create the checker/indicator (hidden when not checked) */
@@ -202,7 +236,7 @@ select {
   padding: 0.5em;
   border: none;
   box-shadow: 2px 4px 5px #e5e5e5;
-  /* color: var(--red); */
+  color: var(--red);
   font-size: 1.6em;
   border-radius: 5px;
   font-weight: 400;
@@ -216,6 +250,20 @@ select {
   font-size: 1.8rem;
   display: flex;
   justify-content: space-between;
+}
+.Task div:first-child{
+  align-self: center;
+}
+.delete-task {
+  padding: 0.5em;
+  border-radius: 5px;
+  background: var(--accent);
+  color: var(--task-text);
+  cursor: pointer;
+}
+.delete-task:hover {
+  width: 25px;
+  height: 25px;
 }
 
 /* COLOR THEME */
@@ -264,33 +312,30 @@ select {
 .modal-body {
   padding: 2em 0;
 }
-.modal-body > div{
-  margin-bottom:3.5em;
-  display:flex;
-  gap:30px;
-  align-items:flex-end;
+.modal-body > div {
+  margin-bottom: 3.5em;
+  display: flex;
+  gap: 30px;
+  align-items: flex-end;
 }
 .modal-body input[type="text"] {
-  
-  padding:.3em .5em;
+  padding: 0.3em 0.5em;
   width: 80%;
   height: 40px;
   border: none;
   background: var(--accent);
   font-family: inherit;
-  font-size:1.8rem;
+  font-size: 1.8rem;
 }
 .modal-body label {
-  align-self: flex-end; 
-  font-family:inherit;
-  font-size:2rem;
- 
+  align-self: flex-end;
+  font-family: inherit;
+  font-size: 2rem;
 }
 .modal-body input[type="radio"] {
-  margin-right:1.5em;
+  margin-right: 1.5em;
   height: 2rem;
   width: 2rem;
- 
 }
 
 .modal-footer {
@@ -299,17 +344,17 @@ select {
   gap: 20px;
 }
 .modal-footer > a {
-  font-size:1.6rem;
+  font-size: 1.6rem;
   display: inline-block;
   text-decoration: none;
   padding: 0.8em 2.6em;
   border-radius: 5px;
 }
-.modal-cancel{
-  color:var(--text);
-  border: 3px solid var(--text);
+.modal-cancel {
+  color: var(--text);
+  border: 3px solid var(--dark);
 }
-.modal-ok{
-  color:var(--side);
-  background-color:var(--text);
+.modal-ok {
+  color: var(--side);
+  background-color: var(--dark);
 }

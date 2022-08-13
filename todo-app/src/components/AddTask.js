@@ -16,7 +16,13 @@ const AddTask = ({ id, listID, addNewTask }) => {
   };
 
   const taskAdd = (e) => {
-    addNewTask(listID, newTask);
+    if(newTask[0].name!==""){
+      addNewTask(listID, newTask);
+    }
+    else{
+      // TODO: display an alert 
+    }
+   
   };
 
   return (
@@ -35,11 +41,11 @@ const AddTask = ({ id, listID, addNewTask }) => {
           <div></div>
         </div>
         <div className="modal-footer">
-          {/* <Link to="/" className="modal-cancel">
+          <Link to={"/"+ listID} className="modal-cancel">
             Cancel
           </Link>
-          */}
-          <Link to={listID} className="modal-ok" onClick={taskAdd}>
+         
+          <Link to={"/"+ listID} className="modal-ok" onClick={taskAdd}>
             OK
           </Link>
         </div>

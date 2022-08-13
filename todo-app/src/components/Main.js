@@ -6,8 +6,14 @@ import Tasks from "./Tasks";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import FilterStatus from "./FilterStatus";
-import DoneTask from "./DoneTask";
-const Main = ({ taskLists, taskCount, getTaskID, handleTaskStatus }) => {
+import NoTasks from "./NoTasks";
+const Main = ({
+  taskLists,
+  taskCount,
+  getTaskID,
+  handleTaskStatus,
+  deleteTask,
+}) => {
   const { taskID } = useParams();
   const lists = taskLists.filter((list) => list.id === taskID);
   const listObj = Object.assign({}, ...lists);
@@ -20,6 +26,7 @@ const Main = ({ taskLists, taskCount, getTaskID, handleTaskStatus }) => {
         name={task.name}
         status={task.status}
         handleTaskStatus={handleTaskStatus}
+        deleteTask={deleteTask}
       />
     );
   });
@@ -42,7 +49,11 @@ const Main = ({ taskLists, taskCount, getTaskID, handleTaskStatus }) => {
         <FilterStatus taskID={taskID} />
       </div>
 
-      <div className="TaskContainer">{allTasks}</div>
+      {tasks.length > 0 ? (
+        <div className="TaskContainer">{allTasks}</div>
+      ) : (
+        <NoTasks />
+      )}
     </div>
   );
 };

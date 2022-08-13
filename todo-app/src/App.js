@@ -9,10 +9,9 @@ import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import Side from "./components/Side";
 import AddTaskList from "./components/AddTaskList";
 import AddTask from "./components/AddTask";
-import DoneTask from "./components/DoneTask";
+import FilterTaskPage from "./components/FilterTaskPage";
 
 function App() {
-
   // LIST OF TASKS
   const [taskLists, setTaskLists] = useState([
     {
@@ -74,9 +73,18 @@ function App() {
     },
   ]);
 
-  // const [tasks, setTasks] = useState([]);
-  const [taskCount, setTaskCount] = useState(0);
   
+  // let countArray=[];
+  // const allCount = taskLists.forEach(task=>{
+  //   countArray.push(task.tasks.length)
+   
+  // })
+  // const [taskCount,setTaskCount] = useState(countArray);
+  // useEffect(()=>{
+
+  // },)
+
+
   // SET PARENT ID
   const [listID, setListID] = useState("");
   const getTaskID = (id) => {
@@ -87,7 +95,6 @@ function App() {
     setListID(id);
   };
 
- 
   // ADD TASK CATEGORY
   const addNewTaskList = (taskList) => {
     const taskCopy = [...taskLists, taskList];
@@ -113,6 +120,25 @@ function App() {
     }
   };
 
+  // DELETE LIST TASK
+  const deleteList = (taskID)=>{
+    const listCopy = [...taskLists];
+    const newList = listCopy.filter(list=>list.id!==taskID);
+    setTaskLists(newList);
+  }
+  // DELETE TASK
+  const deleteTask = (taskID, id) => {
+    const listCopy = [...taskLists];
+    const newList = listCopy
+      .filter((list) => list.id === taskID)
+      .map((list) => list.tasks)
+      .flat()
+      .filter((task) => task.id !== id);
+    const index = listCopy.findIndex((copy) => copy.id === taskID);
+    listCopy[index].tasks = newList;
+    setTaskLists(listCopy);
+   
+  };
   // CHECK AND UPDATE STATUS
   const doneTasks = taskLists
     .map((task) => task.tasks)
@@ -150,7 +176,7 @@ function App() {
             Add List <FontAwesomeIcon icon={faCirclePlus} />
           </Link>
           <div className="TaskList">
-            <Side taskLists={taskLists} taskCount={taskCount} />
+            <Side taskLists={taskLists}  deleteList={deleteList} />
           </div>
         </div>
         <Routes>
@@ -159,9 +185,10 @@ function App() {
             element={
               <Main
                 taskLists={taskLists}
-                taskCount={taskCount}
+                
                 getTaskID={getTaskID}
                 handleTaskStatus={handleTaskStatus}
+                deleteTask={deleteTask}
               />
             }
           ></Route>
@@ -174,15 +201,20 @@ function App() {
           <Route
             path="/add-task"
             element={
-              <AddTask
-                id={uuidv4()}
-                listID={listID}
-                addNewTask={addNewTask}
-                
+              <AddTask id={uuidv4()} listID={listID} addNewTask={addNewTask} />
+            }
+          />
+          <Route
+            path=":taskID/:status"
+            element={
+              <FilterTaskPage
+                tasks={taskLists}
+                handleTaskStatus={handleTaskStatus}
+                getTaskID={getTaskID}
+                deleteTask={deleteTask}
               />
             }
           />
-          <Route path=":taskID/:status" element={<DoneTask tasks={taskLists}  handleTaskStatus={handleTaskStatus} getTaskID={getTaskID}/>} />
         </Routes>
 
         {/* <SideBar

@@ -1,22 +1,28 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-const Side = ({ taskLists, taskCount }) => {
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+const Side = ({ taskLists, deleteList }) => {
   return (
     <ul>
-    
       {taskLists.map((list) => (
         <li>
-          <Link to={list.id} >
-            <span>
-              <span className="task-menu-icon">
-                <FontAwesomeIcon icon={faBars} />
-              </span>
-              {list.name}
-            </span>
-            <span>{taskCount}</span>
-          </Link>
+          <span className="task-menu-icon">
+            <Link to="/" className="side-delete-link">
+              <FontAwesomeIcon
+                className="side-delete-task"
+                icon={faTrash}
+                onClick={() => deleteList(list.id)}
+              />
+            </Link>
+          </span>
+
+          <div>
+            <Link to={list.id} className="side-bar-tasks">
+              <span>{list.name}</span>
+              {/* <span>NUMBER OF TASKS</span> */}
+            </Link>
+          </div>
         </li>
       ))}
     </ul>
