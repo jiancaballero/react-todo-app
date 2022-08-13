@@ -13,7 +13,7 @@ const Tasks = ({ taskID, id, name, status, handleTaskStatus, deleteTask }) => {
   return (
     <div className="Task">
       <div>
-        {/* FIXME: Some tasks automatically checked even it is not done */}
+        {/* FIXME: Some tasks automatically are checked even it is not done */}
         {status === "done" ? (
           <label className="checkerContainer LabelDone">
             {name}

@@ -14,11 +14,13 @@ import PageNotFound from "./components/PageNotFound";
 
 function App() {
   // LIST OF TASKS
+  // FIXME: list id of default list are not the same with the id of the list.
+
   const [taskLists, setTaskLists] = useState([
     {
       id: uuidv4(),
       name: "Important",
-      color: "red",
+      
       tasks: [
         {
           taskID: 0,
@@ -43,7 +45,7 @@ function App() {
     {
       id: uuidv4(),
       name: "Work",
-      color: "yellow",
+   
       tasks: [
         {
           taskID: 0,
@@ -62,7 +64,7 @@ function App() {
     {
       id: uuidv4(),
       name: "Travel",
-      color: "green",
+      
       tasks: [
         {
           taskID: 0,
@@ -74,7 +76,7 @@ function App() {
     },
   ]);
 
-  // SET PARENT ID
+  // SET LIST ID
   const [listID, setListID] = useState("");
   const getTaskID = (id) => {
     // const listsCopy = [...taskLists];
@@ -173,7 +175,7 @@ function App() {
             You have <span className="total-task-count">{pendingCount} </span>
             pending tasks
           </h1>
-          <h1>Let's do this!</h1>
+          {pendingCount!=0 ? <h1>Let's do this!</h1> : ""}
           <hr></hr>
           <Link to="/add-task-list">
             Add List <FontAwesomeIcon icon={faCirclePlus} />
@@ -222,7 +224,7 @@ function App() {
               />
             }
           />
-          {/* <Route path="*" element={<PageNotFound/>}/> */}
+          {/*FIXME: PageNotFound is not working <Route path="*" element={<PageNotFound/>}/> */}
         </Routes>
 
         {/* <SideBar

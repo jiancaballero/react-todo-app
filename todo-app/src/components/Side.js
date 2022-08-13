@@ -20,7 +20,9 @@ const Side = ({ taskLists, deleteList }) => {
           <div>
             <Link to={list.id} className="side-bar-tasks">
               <span>{list.name}</span>
-              {/* <span>NUMBER OF TASKS</span> */}
+              <span>
+                {list.tasks.filter((task) => task.status === "pending").length}
+              </span>
             </Link>
           </div>
         </li>

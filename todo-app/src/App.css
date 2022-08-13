@@ -1,5 +1,5 @@
 :root {
-  --side: #fcfcfc;
+  --side: #F8F8F8;
   --main: #fdfdfd;
   --text: #5d6c7b;
   --accent: #ebeef5;
@@ -58,7 +58,9 @@
 .sidebar h1:last-of-type {
   margin-bottom: 0.5em;
 }
+
 .sidebar > a {
+
   text-decoration: none;
   background: var(--dark);
   border: none;
@@ -108,7 +110,8 @@
   height: 25px;
 }
 .side-bar-tasks {
-  display: inline-block;
+  display: flex;
+  justify-content: space-between;
   text-decoration: none;
   color: var(--light-blue);
   padding: 1em;
