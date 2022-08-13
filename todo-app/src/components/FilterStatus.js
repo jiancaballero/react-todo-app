@@ -11,6 +11,7 @@ const FilterStatus = ({ taskID }) => {
     //pass the taskID and setState as a url
   };
 
+  // FIXME: nagiging ALL yung na naseselect kapag magseselect after maselect ang ALL
   return (
     <select onChange={handleFilter}>
       <option selected="selected" value="">

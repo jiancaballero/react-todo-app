@@ -33,7 +33,7 @@ const AddTaskList = ({ id, addNewTaskList }) => {
     if (task.name) {
       return true;
     } else {
-      alert("Please input a task!");
+      alert("Please input a name for the list.");
       return false;
     }
   }

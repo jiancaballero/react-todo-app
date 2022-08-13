@@ -15,6 +15,7 @@ const Main = ({
   handleTaskStatus,
   deleteTask,
 }) => {
+  // FIXME: kapag pumindot ng list tas nirefresh nawawala yung content
   const { taskID } = useParams();
   const lists = taskLists.filter((list) => list.id === taskID);
   const listObj = Object.assign({}, ...lists);

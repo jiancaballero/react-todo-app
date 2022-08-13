@@ -39,7 +39,7 @@ const AddTask = ({ id, listID, addNewTask }) => {
     if (newTask[0].name !== "") {
       return true;
     } else {
-      alert("Please input a task!");
+      alert("Please input a task.");
       return false;
     }
   }

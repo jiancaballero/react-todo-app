@@ -74,16 +74,6 @@ function App() {
     },
   ]);
 
-  // let countArray=[];
-  // const allCount = taskLists.forEach(task=>{
-  //   countArray.push(task.tasks.length)
-
-  // })
-  // const [taskCount,setTaskCount] = useState(countArray);
-  // useEffect(()=>{
-
-  // },)
-
   // SET PARENT ID
   const [listID, setListID] = useState("");
   const getTaskID = (id) => {
@@ -96,7 +86,7 @@ function App() {
 
   // ADD TASK CATEGORY
   const addNewTaskList = (list) => {
-    if(list){
+    if (list) {
       const taskCopy = [...taskLists, list];
       setTaskLists(taskCopy);
     }
@@ -144,10 +134,20 @@ function App() {
     .map((task) => task.tasks)
     .flat()
     .filter((task) => task.status === "done");
+
   const pendingTasks = taskLists
     .map((task) => task.tasks)
     .flat()
     .filter((task) => task.status === "pending");
+
+  // TOTAL COUNT OF PENDING TASKS
+  const [pendingCount, setPendingCount] = useState(pendingTasks.length);
+  useEffect(() => {
+    setPendingCount(pendingTasks.length);
+  }, [pendingTasks]);
+
+  //COUNT OF PENDING TASK PER CATEOGRY
+  // TODO: pending task count for each list 
 
   const handleTaskStatus = (taskID, id) => {
     let listCopy = [...taskLists];
@@ -169,7 +169,10 @@ function App() {
     <div className="container">
       <div className="grid">
         <div className="sidebar">
-          <h1>You have 20 tasks</h1>
+          <h1>
+            You have <span className="total-task-count">{pendingCount} </span>
+            pending tasks
+          </h1>
           <h1>Let's do this!</h1>
           <hr></hr>
           <Link to="/add-task-list">
@@ -200,7 +203,12 @@ function App() {
           <Route
             path="/add-task"
             element={
-              <AddTask tasks={taskLists} id={uuidv4()} listID={listID} addNewTask={addNewTask} />
+              <AddTask
+                tasks={taskLists}
+                id={uuidv4()}
+                listID={listID}
+                addNewTask={addNewTask}
+              />
             }
           />
           <Route
