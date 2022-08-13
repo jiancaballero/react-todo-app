@@ -64,6 +64,10 @@
   display: flex;
   justify-content: space-between;
 }
+.sidebar>a:hover{
+  background:#17182E;
+  color:#414258;
+}
 .TaskList {
   overflow: auto;
   max-height: 500px;
@@ -141,6 +145,10 @@ hr {
   font-size: 1.8rem;
   background: var(--red);
   color: var(--light-red);
+}
+.SecondMainHeader >a:hover{
+  background:#B24441;
+  color:#B77371;
 }
 .NoTaskContainer {
   height: 500px;
@@ -311,12 +319,12 @@ select {
 }
 .modal-body {
   padding: 2em 0;
-}
-.modal-body > div {
   margin-bottom: 3.5em;
+}
+.modal-body > form {
   display: flex;
-  gap: 30px;
-  align-items: flex-end;
+
+
 }
 .modal-body input[type="text"] {
   padding: 0.3em 0.5em;
@@ -330,6 +338,7 @@ select {
 .modal-body label {
   align-self: flex-end;
   font-family: inherit;
+  margin-right:1em;
   font-size: 2rem;
 }
 .modal-body input[type="radio"] {
@@ -343,7 +352,8 @@ select {
   justify-content: flex-end;
   gap: 20px;
 }
-.modal-footer > a {
+.modal-footer > a,.modal-footer button {
+  cursor: pointer;
   font-size: 1.6rem;
   display: inline-block;
   text-decoration: none;
@@ -355,6 +365,7 @@ select {
   border: 3px solid var(--dark);
 }
 .modal-ok {
+  border:none;
   color: var(--side);
   background-color: var(--dark);
 }

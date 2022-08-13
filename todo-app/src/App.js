@@ -10,6 +10,7 @@ import Side from "./components/Side";
 import AddTaskList from "./components/AddTaskList";
 import AddTask from "./components/AddTask";
 import FilterTaskPage from "./components/FilterTaskPage";
+import PageNotFound from "./components/PageNotFound";
 
 function App() {
   // LIST OF TASKS
@@ -73,17 +74,15 @@ function App() {
     },
   ]);
 
-  
   // let countArray=[];
   // const allCount = taskLists.forEach(task=>{
   //   countArray.push(task.tasks.length)
-   
+
   // })
   // const [taskCount,setTaskCount] = useState(countArray);
   // useEffect(()=>{
 
   // },)
-
 
   // SET PARENT ID
   const [listID, setListID] = useState("");
@@ -121,11 +120,11 @@ function App() {
   };
 
   // DELETE LIST TASK
-  const deleteList = (taskID)=>{
+  const deleteList = (taskID) => {
     const listCopy = [...taskLists];
-    const newList = listCopy.filter(list=>list.id!==taskID);
+    const newList = listCopy.filter((list) => list.id !== taskID);
     setTaskLists(newList);
-  }
+  };
   // DELETE TASK
   const deleteTask = (taskID, id) => {
     const listCopy = [...taskLists];
@@ -137,7 +136,6 @@ function App() {
     const index = listCopy.findIndex((copy) => copy.id === taskID);
     listCopy[index].tasks = newList;
     setTaskLists(listCopy);
-   
   };
   // CHECK AND UPDATE STATUS
   const doneTasks = taskLists
@@ -176,7 +174,7 @@ function App() {
             Add List <FontAwesomeIcon icon={faCirclePlus} />
           </Link>
           <div className="TaskList">
-            <Side taskLists={taskLists}  deleteList={deleteList} />
+            <Side taskLists={taskLists} deleteList={deleteList} />
           </div>
         </div>
         <Routes>
@@ -185,7 +183,6 @@ function App() {
             element={
               <Main
                 taskLists={taskLists}
-                
                 getTaskID={getTaskID}
                 handleTaskStatus={handleTaskStatus}
                 deleteTask={deleteTask}
@@ -201,7 +198,7 @@ function App() {
           <Route
             path="/add-task"
             element={
-              <AddTask id={uuidv4()} listID={listID} addNewTask={addNewTask} />
+              <AddTask tasks={taskLists} id={uuidv4()} listID={listID} addNewTask={addNewTask} />
             }
           />
           <Route
@@ -215,6 +212,7 @@ function App() {
               />
             }
           />
+          {/* <Route path="*" element={<PageNotFound/>}/> */}
         </Routes>
 
         {/* <SideBar
