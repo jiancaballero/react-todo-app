@@ -95,9 +95,11 @@ function App() {
   };
 
   // ADD TASK CATEGORY
-  const addNewTaskList = (taskList) => {
-    const taskCopy = [...taskLists, taskList];
-    setTaskLists(taskCopy);
+  const addNewTaskList = (list) => {
+    if(list){
+      const taskCopy = [...taskLists, list];
+      setTaskLists(taskCopy);
+    }
   };
 
   // ADD MAIN TASKS

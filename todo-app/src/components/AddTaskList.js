@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 const AddTaskList = ({ id, addNewTaskList }) => {
   const navigate = useNavigate();
   const [task, setTask] = useState({
-    id: "",
+    id: id,
     name: "",
     color: "",
     tasks: [],
@@ -21,9 +21,9 @@ const AddTaskList = ({ id, addNewTaskList }) => {
 
   const addTask = (e) => {
     const hasTask = checkHasTask(task);
-    const hasDuplicate = checkDuplicateTask(task);
-
-    if (hasTask && hasDuplicate) {
+    const hasNoDuplicate = checkDuplicateTask(task);
+    debugger;
+    if (hasTask && hasNoDuplicate) {
       addNewTaskList(task);
       navigate(`/${id}`);
     }
@@ -31,10 +31,10 @@ const AddTaskList = ({ id, addNewTaskList }) => {
 
   function checkHasTask(task) {
     if (task.name) {
-      addNewTaskList(task);
-      navigate(`/${id}`);
+      return true;
     } else {
       alert("Please input a task!");
+      return false;
     }
   }
   function checkDuplicateTask(task) {
