@@ -21,6 +21,7 @@ const AddTaskList = ({ id, addNewTaskList, taskList }) => {
         break;
     }
   };
+
   const duplicate = taskList.filter(
     (list) =>
       list.name
@@ -42,7 +43,7 @@ const AddTaskList = ({ id, addNewTaskList, taskList }) => {
       navigate(`/${id}`);
     }
   };
-
+  // FIXME: when user hits enter, di nag proprompt dapat iclick button
   return (
     <div className="overlay">
       <div className="modal">

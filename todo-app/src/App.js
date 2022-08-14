@@ -5,7 +5,11 @@ import { v4 as uuidv4 } from "uuid";
 import { Route, Routes } from "react-router";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCirclePlus,
+  faBars,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import Side from "./components/Side";
 import AddTaskList from "./components/AddTaskList";
 import AddTask from "./components/AddTask";
@@ -137,22 +141,26 @@ function App() {
     }
   };
 
-  // RENDERING 
+  // RENDERING
   return (
     <div className="container">
       <div className="grid">
-        <div className="sidebar">
-          <h1>
-            You have <span className="total-task-count">{pendingCount} </span>
-            pending task{pendingCount!=0?<span>s</span>:""}
-          </h1>
-          {pendingCount != 0 ? <h1>Let's do this!</h1> : ""}
-          <hr></hr>
-          <Link to="/add-task-list">
-            Add Category <FontAwesomeIcon icon={faCirclePlus} />
-          </Link>
-          <div className="TaskList">
-            <Side taskLists={taskLists} deleteList={deleteList} />
+        <div className="menuToggle">
+          <input type="checkbox" ></input>
+          <FontAwesomeIcon icon={faBars} className="open-modal"/>
+          <div className="sidebar">
+            <h1>
+              You have <span className="total-task-count">{pendingCount} </span>
+              pending task{pendingCount > 1 ? <span>s</span> : ""}
+            </h1>
+            {pendingCount != 0 ? <h1>Let's do this!</h1> : ""}
+            <hr></hr>
+            <Link to="/add-task-list">
+              Add Category <FontAwesomeIcon icon={faCirclePlus} />
+            </Link>
+            <div className="TaskList">
+              <Side taskLists={taskLists} deleteList={deleteList} />
+            </div>
           </div>
         </div>
         <Routes>
@@ -170,7 +178,11 @@ function App() {
           <Route
             path="/add-task-list"
             element={
-              <AddTaskList id={uuidv4()} addNewTaskList={addNewTaskList} taskList={taskLists} />
+              <AddTaskList
+                id={uuidv4()}
+                addNewTaskList={addNewTaskList}
+                taskList={taskLists}
+              />
             }
           />
           <Route
