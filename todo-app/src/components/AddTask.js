@@ -23,7 +23,7 @@ const AddTask = ({ id, listID, addNewTask, taskList }) => {
     const allTasks = [newTaskObj];
     setNewTask(allTasks);
   };
-  const tasks = taskList.map((list) => list.tasks).flat();
+  const tasks = taskList.filter(task=>task.id===listID).map((list) => list.tasks).flat();
   const newTaskObj = Object.assign({}, ...newTask);
   const duplicate = tasks.filter(
     (task) =>
@@ -44,7 +44,7 @@ const AddTask = ({ id, listID, addNewTask, taskList }) => {
       alert("Task already exists");
     } else {
       addNewTask(listID, newTask);
-      navigate(`/${listID}`);
+      navigate(`/all/${listID}`);
     }
   };
 

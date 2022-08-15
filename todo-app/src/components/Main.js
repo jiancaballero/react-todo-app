@@ -8,9 +8,14 @@ import { Link } from "react-router-dom";
 
 import FilterStatus from "./FilterStatus";
 import NoTasks from "./NoTasks";
+import AllTasks from "./AllTasks";
+import FilterTaskPage from "./FilterTaskPage";
 const Main = ({ taskLists, getTaskID, handleTaskStatus, deleteTask }) => {
   // FIXME: kapag pumindot ng list tas nirefresh nawawala yung content
-  const { taskID } = useParams();
+  const params = useParams();
+  const taskID = params.taskID;
+  const status = params.status;
+
   const lists = taskLists.filter((list) => list.id === taskID);
   const listObj = Object.assign({}, ...lists);
   const tasks = listObj.tasks;
@@ -40,13 +45,17 @@ const Main = ({ taskLists, getTaskID, handleTaskStatus, deleteTask }) => {
         <Link to="/add-task" onClick={getListID}>
           Add Task <FontAwesomeIcon icon={faCirclePlus} />
         </Link>
-        <FilterStatus taskID={taskID} />
+        <FilterStatus taskID={taskID} status={status}/>
       </div>
-
-      {tasks.length > 0 ? (
-        <div className="TaskContainer">{allTasks}</div>
+      {status.toLowerCase() == "all" ? (
+        <AllTasks allTasks={allTasks} />
       ) : (
-        <NoTasks />
+        <FilterTaskPage
+          tasks={taskLists}
+          handleTaskStatus={handleTaskStatus}
+          getTaskID={getTaskID}
+          deleteTask={deleteTask}
+        />
       )}
     </div>
   );

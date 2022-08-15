@@ -5,12 +5,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import FilterStatus from "./FilterStatus";
+import NoTasks from "./NoTasks";
 const DoneTask = ({ tasks, handleTaskStatus, getTaskID, deleteTask }) => {
   const params = useParams();
   // gets the id and status from the url
   const taskID = params.taskID;
   const status = params.status;
   const listName = tasks.filter((task) => task.id === taskID);
+
   const allTasks = tasks
     .filter((task) => task.id === taskID)
     .map((task) => task.tasks)
@@ -33,20 +35,8 @@ const DoneTask = ({ tasks, handleTaskStatus, getTaskID, deleteTask }) => {
   };
 
   return (
-    <div className="main">
-      <div className="MainHeader">
-        <h1>{listName[0].name}</h1>
-        <h1></h1>
-      </div>
-      <div className="SecondMainHeader">
-        <Link to="/add-task" onClick={getListID}>
-          Add Task <FontAwesomeIcon icon={faCirclePlus} />
-        </Link>
-
-        <FilterStatus taskID={taskID} />
-      </div>
-
-      <div className="TaskContainer">{allTasks}</div>
+    <div className="TaskContainer">
+      {allTasks.length > 0 ? allTasks : <NoTasks />}
     </div>
   );
 };

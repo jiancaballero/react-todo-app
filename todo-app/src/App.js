@@ -145,9 +145,10 @@ function App() {
   return (
     <div className="container">
       <div className="grid">
+        {/* SIDE BAR */}
         <div className="menuToggle">
-          <input type="checkbox" ></input>
-          <FontAwesomeIcon icon={faBars} className="open-modal"/>
+          <input type="checkbox"></input>
+          <FontAwesomeIcon icon={faBars} className="open-modal" />
           <div className="sidebar">
             <h1>
               You have <span className="total-task-count">{pendingCount} </span>
@@ -163,9 +164,12 @@ function App() {
             </div>
           </div>
         </div>
+        {/* MAIN CONTENT */}
+
         <Routes>
+          {/* <Route path="*" element= {<App/>}/> */}
           <Route
-            path=":taskID"
+            path=":status/:taskID"
             element={
               <Main
                 taskLists={taskLists}
@@ -196,26 +200,8 @@ function App() {
               />
             }
           />
-          <Route
-            path=":taskID/:status"
-            element={
-              <FilterTaskPage
-                tasks={taskLists}
-                handleTaskStatus={handleTaskStatus}
-                getTaskID={getTaskID}
-                deleteTask={deleteTask}
-              />
-            }
-          />
-          {/*FIXME: PageNotFound is not working <Route path="*" element={<PageNotFound/>}/> */}
+          {/* FIXME:NOT WROKING PAGE NOT FOUND <Route path="*" element={<PageNotFound />} /> */}
         </Routes>
-
-        {/* <SideBar
-          taskLists={taskLists}
-          getTaskID={getTaskID}
-          taskCount={taskCount}
-        /> */}
-        {/* <Main subtasks={subTasks} task={taskProperty} taskCount={taskCount} /> */}
       </div>
     </div>
   );

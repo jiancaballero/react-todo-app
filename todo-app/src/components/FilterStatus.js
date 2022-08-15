@@ -1,23 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, useNavigate } from "react-router-dom";
 
-const FilterStatus = ({ taskID }) => {
-  const navigate = useNavigate();
-  const handleFilter = (e) => {
-    const filterValue = e.target.value;
-    navigate(`/${taskID}/${filterValue}`);
-    
-  };
+const FilterStatus = ({ taskID, status }) => {
+  const navigate = useNavigate(); 
+  const [selected,setSelected] = useState(status);
 
-  // FIXME: nagiging ALL yung na naseselect kapag  after maselect ang ALL KAHIT NA IBA ISELECT
+  const handleFilter = (e) => {
+
+    const filterValue = e.target.value;
+    navigate(`/${filterValue}/${taskID}`);
+  
+  };
+ 
+  useEffect(()=>{
+    
+    // set the default value or selected value
+  },[status])
+
+
   return (
     <select onChange={handleFilter}>
-      <option selected="selected" value="">
-        All
-      </option>
+      <option value="all">All</option>
       <option value="pending">Pending</option>
-      <option value="done">Done</option>
+      <option value="done" >Done</option>
     </select>
   );
 };

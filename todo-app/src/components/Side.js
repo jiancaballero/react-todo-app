@@ -18,7 +18,7 @@ const Side = ({ taskLists, deleteList }) => {
           </span>
 
           <div>
-            <Link to={list.id} className="side-bar-tasks">
+            <Link to={'/all/'+list.id} className="side-bar-tasks">
               <span>{list.name}</span>
               <span>
                 {list.tasks.filter((task) => task.status === "pending").length}
