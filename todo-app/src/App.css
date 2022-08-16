@@ -164,8 +164,8 @@ hr {
   color: #b77371;
 }
 .NoTaskContainer {
-  height:420px;
-  padding: 4em;
+  height:460px;
+ 
   border-radius: 5px;
   background: var(--accent);
   color: var(--task-text);
@@ -180,7 +180,7 @@ hr {
   opacity: 0.3;
 }
 .TaskContainer {
-  max-height: 450px;
+  max-height: 70%;
   overflow: auto;
   background: var(--accent);
   padding: 2em;
