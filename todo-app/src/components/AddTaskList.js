@@ -36,7 +36,7 @@ const AddTaskList = ({ id, addNewTaskList, taskList }) => {
   const addTask = (e) => {
     if (duplicate.length) {
       alert("Category already exists.");
-    } else if (task.name === "") {
+    } else if (task.name.trim() === "") {
       alert("Please input a name for the category.");
     } else {
       addNewTaskList(task);

@@ -38,7 +38,7 @@ const AddTask = ({ id, listID, addNewTask, taskList }) => {
   );
 
   const taskAdd = () => {
-    if (newTaskObj.name === "") {
+    if (newTaskObj.name.trim() === "") {
       alert("Please input a task.");
     } else if (duplicate.length) {
       alert("Task already exists");
