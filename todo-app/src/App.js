@@ -164,8 +164,6 @@ function App() {
             </div>
           </div>
         </div>
-        {/* MAIN CONTENT */}
-
         <Routes>
           {/* <Route path="*" element= {<App/>}/> */}
           <Route
@@ -186,6 +184,7 @@ function App() {
                 id={uuidv4()}
                 addNewTaskList={addNewTaskList}
                 taskList={taskLists}
+                
               />
             }
           />
@@ -200,7 +199,7 @@ function App() {
               />
             }
           />
-          {/* FIXME:NOT WROKING PAGE NOT FOUND <Route path="*" element={<PageNotFound />} /> */}
+          {/* ISSUE: PAGE NOT FOUND <Route path="*" element={<PageNotFound />} /> */}
         </Routes>
       </div>
     </div>

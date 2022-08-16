@@ -40,7 +40,7 @@ const AddTaskList = ({ id, addNewTaskList, taskList }) => {
       alert("Please input a name for the category.");
     } else {
       addNewTaskList(task);
-      navigate(`/${id}`);
+      navigate(`/all/${id}`);
     }
   };
   // FIXME: when user hits enter, di nag proprompt dapat iclick button
@@ -60,7 +60,7 @@ const AddTaskList = ({ id, addNewTaskList, taskList }) => {
           </div>
         </div>
         <div className="modal-footer">
-          <Link to="/" className="modal-cancel">
+          <Link to={"/"} className="modal-cancel">
             Cancel
           </Link>
           <button onClick={addTask} className="modal-ok">
