@@ -450,8 +450,11 @@ select {
 
 /* MOBILE */
 @media screen and (min-width:320px) and (max-width: 425px) {
+  .MainHeader{
+    padding-top:2.5em;
+  }
   .MainHeader h1 {
-    font-size: 5.2rem;
+    font-size: 4.2rem;
   }
   .SecondMainHeader {
     flex-direction: column;
@@ -475,8 +478,7 @@ select {
     font-size: 1.6rem;
   }
   .TaskContainer {
-   
-    max-height: 420px;
+    max-height: 400px;
   }
   
   .open-modal{
@@ -486,7 +488,7 @@ select {
     font-size:3.6rem;
   }
   .NoTaskContainer{
-    height:400px;
+    height:380px;
     padding:2em;
   }
 
