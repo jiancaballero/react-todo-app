@@ -68,7 +68,7 @@ const AddTask = ({ id, listID, addNewTask, taskList }) => {
           <div></div>
         </div>
         <div className="modal-footer">
-          <Link to={"/" + listID} className="modal-cancel">
+          <Link to={"/all/" + listID} className="modal-cancel">
             Cancel
           </Link>
 

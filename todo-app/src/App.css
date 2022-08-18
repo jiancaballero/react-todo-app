@@ -33,6 +33,7 @@
 .task-menu-icon {
   display: flex;
   align-items: center;
+ gap:10px;
 }
 .total-task-count {
   color: var(--red);
@@ -105,8 +106,10 @@
   color: var(--light-blue);
   padding: 0.5em;
   border-radius: 5px;
+  font-size:1.5rem;
 }
-.side-delete-task:hover {
+
+.side-delete-task:hover{
   width: 25px;
   height: 25px;
 }
@@ -275,16 +278,20 @@ select {
 .Task div:first-child {
   align-self: center;
 }
-.delete-task {
+.delete-task,.update-task {
   padding: 0.5em;
   border-radius: 5px;
   background: var(--accent);
   color: var(--task-text);
   cursor: pointer;
+  
 }
-.delete-task:hover {
+.delete-task:hover,.update-task:hover {
   width: 25px;
   height: 25px;
+}
+.update-task{
+  margin-right:10px;
 }
 
 .overlay {

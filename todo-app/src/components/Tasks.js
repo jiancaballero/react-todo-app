@@ -1,28 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
-const Tasks = ({ taskID, id, name, status, handleTaskStatus, deleteTask }) => {
+import { Link } from "react-router-dom";
+const Tasks = ({
+  taskID,
+  id,
+  name,
+  status,
+  handleTaskStatus,
+  deleteTask,
+  updateTask,
+}) => {
   // const [taskStatus,setTaskStatus] = useState(false)
   const updateStatus = (e) => {
     handleTaskStatus(taskID, id);
-  
-  
   };
   const getID = () => {
-    deleteTask(taskID,id);
+    deleteTask(taskID, id);
   };
-  const [checker,setChecker] = useState("")
-  useEffect(()=>{
+
+  const getTaskID = () => {};
+
+  const [checker, setChecker] = useState("");
+  useEffect(() => {
     setChecker("checked");
-  },[status])
+  }, [status]);
   return (
     <div className="Task">
       <div>
-        
         {status === "done" ? (
           <label className="checkerContainer LabelDone">
             {name}
-            <input type="checkbox" onChange={updateStatus} checked={checker}></input>
+            <input
+              type="checkbox"
+              onChange={updateStatus}
+              checked={checker}
+            ></input>
             <span className="checker"></span>
           </label>
         ) : (
@@ -34,7 +47,12 @@ const Tasks = ({ taskID, id, name, status, handleTaskStatus, deleteTask }) => {
         )}
       </div>
       <div>
-        
+        {status === "pending" && (
+          <Link to={`/update/${taskID}/${id}`} onClick={getTaskID}>
+            <FontAwesomeIcon className="update-task" icon={faPencil} />
+          </Link>
+        )}
+
         <FontAwesomeIcon
           className="delete-task"
           icon={faTrash}

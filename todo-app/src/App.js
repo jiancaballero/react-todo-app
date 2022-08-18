@@ -5,16 +5,14 @@ import { v4 as uuidv4 } from "uuid";
 import { Route, Routes } from "react-router";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCirclePlus,
-  faBars,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus, faBars } from "@fortawesome/free-solid-svg-icons";
 import Side from "./components/Side";
 import AddTaskList from "./components/AddTaskList";
 import AddTask from "./components/AddTask";
 import FilterTaskPage from "./components/FilterTaskPage";
 import PageNotFound from "./components/PageNotFound";
+import UpdateTask from "./components/UpdateTask";
+import UpdateCategory from "./components/UpdateCategory";
 
 function App() {
   // ORIGINAL TASKS
@@ -55,10 +53,6 @@ function App() {
   // SET LIST ID
   const [listID, setListID] = useState("");
   const getTaskID = (id) => {
-    // const listsCopy = [...taskLists];
-    // const list = listsCopy.filter((copy) => copy.id === id);
-    // const listObj = Object.assign({}, ...list);
-    // setTasks(listObj.tasks);
     setListID(id);
   };
 
@@ -68,6 +62,7 @@ function App() {
       const taskCopy = [...taskLists, list];
       setTaskLists(taskCopy);
     }
+    console.log(taskLists);
   };
 
   // ADD MAIN TASKS
@@ -89,6 +84,26 @@ function App() {
     }
   };
 
+  // UPDATE CATEGORY
+  // FIXME: doesnt render
+  const categoryUpdate = (list) => {
+    setTaskLists(list);
+  };
+
+  // UPDATE TASK
+  const updateTask = (taskID, id, list) => {
+    const taskCopy = [...taskLists];
+    const selectedTask = taskCopy
+      .filter((task) => task.id === taskID)
+      .map((task) => task.tasks)
+      .flat();
+    const index = selectedTask.findIndex((task) => task.id === id);
+    selectedTask.splice(index, 1, list);
+    const categoryIndex = taskCopy.findIndex((copy) => copy.id === taskID);
+    taskCopy[categoryIndex].tasks = selectedTask;
+    setTaskLists(taskCopy);
+  };
+
   // DELETE LIST TASK
   const deleteList = (taskID) => {
     const listCopy = [...taskLists];
@@ -108,10 +123,10 @@ function App() {
     setTaskLists(listCopy);
   };
   // CHECK AND UPDATE STATUS
-  const doneTasks = taskLists
-    .map((task) => task.tasks)
-    .flat()
-    .filter((task) => task.status === "done");
+  // const doneTasks = taskLists
+  //   .map((task) => task.tasks)
+  //   .flat()
+  //   .filter((task) => task.status === "done");
 
   const pendingTasks = taskLists
     .map((task) => task.tasks)
@@ -174,6 +189,7 @@ function App() {
                 getTaskID={getTaskID}
                 handleTaskStatus={handleTaskStatus}
                 deleteTask={deleteTask}
+                // updateTask={updateTask}
               />
             }
           ></Route>
@@ -184,7 +200,6 @@ function App() {
                 id={uuidv4()}
                 addNewTaskList={addNewTaskList}
                 taskList={taskLists}
-                
               />
             }
           />
@@ -196,6 +211,21 @@ function App() {
                 id={uuidv4()}
                 listID={listID}
                 addNewTask={addNewTask}
+              />
+            }
+          />
+          <Route
+            path="/update/:taskID/:id"
+            element={
+              <UpdateTask taskLists={taskLists} updateTask={updateTask} />
+            }
+          />
+          <Route
+            path="/update/category/:taskID/"
+            element={
+              <UpdateCategory
+                taskLists={taskLists}
+                categoryUpdate={categoryUpdate}
               />
             }
           />

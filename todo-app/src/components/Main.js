@@ -10,7 +10,7 @@ import FilterStatus from "./FilterStatus";
 import NoTasks from "./NoTasks";
 import AllTasks from "./AllTasks";
 import FilterTaskPage from "./FilterTaskPage";
-const Main = ({ taskLists, getTaskID, handleTaskStatus, deleteTask }) => {
+const Main = ({ taskLists, getTaskID, handleTaskStatus, deleteTask,updateTask }) => {
   // FIXME: kapag pumindot ng list tas nirefresh nawawala yung content
   const params = useParams();
   const taskID = params.taskID;
@@ -28,6 +28,7 @@ const Main = ({ taskLists, getTaskID, handleTaskStatus, deleteTask }) => {
         status={task.status}
         handleTaskStatus={handleTaskStatus}
         deleteTask={deleteTask}
+        updateTask={updateTask}
       />
     );
   });

@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash,faPencil } from "@fortawesome/free-solid-svg-icons";
 const Side = ({ taskLists, deleteList }) => {
+ 
   return (
     <ul>
       {taskLists.map((list) => (
         <li>
           <span className="task-menu-icon">
+      
+          <Link to={`/update/category/${list.id}`}className="side-update-link">
+              <FontAwesomeIcon
+                className="side-delete-task"
+                icon={faPencil}
+               
+              />
+            </Link>
             <Link to="/" className="side-delete-link">
               <FontAwesomeIcon
                 className="side-delete-task"

@@ -17,7 +17,7 @@ const AddTaskList = ({ id, addNewTaskList, taskList }) => {
     switch (e.target.name) {
       case "name":
         setTask({ ...task, name: e.target.value });
-        console.log(e.target.value);
+
         break;
     }
   };
